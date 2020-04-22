@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>login_reg_mainwindow</class>
+    <widget class="QMainWindow" name="login_reg_mainwindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>417</width>
+                <height>224</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>MainWindow</string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <widget class="QTabWidget" name="login_reg_tab_widget">
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>0</y>
+                        <width>401</width>
+                        <height>221</height>
+                    </rect>
+                </property>
+                <property name="tabPosition">
+                    <enum>QTabWidget::North</enum>
+                </property>
+                <property name="tabShape">
+                    <enum>QTabWidget::Rounded</enum>
+                </property>
+                <property name="currentIndex">
+                    <number>0</number>
+                </property>
+                <widget class="QWidget" name="tab_login">
+                    <attribute name="title">
+                        <string>Bejelentkezés</string>
+                    </attribute>
+                    <widget class="QGroupBox" name="login_groupbox">
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>10</y>
+                                <width>381</width>
+                                <height>161</height>
+                            </rect>
+                        </property>
+                        <property name="layoutDirection">
+                            <enum>Qt::LeftToRight</enum>
+                        </property>
+                        <property name="title">
+                            <string>Már regisztrált felhasználó számára</string>
+                        </property>
+                        <widget class="QWidget" name="verticalLayoutWidget">
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>361</width>
+                                    <height>131</height>
+                                </rect>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout">
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_4">
+                                        <item>
+                                            <widget class="QLabel" name="username_label">
+                                                <property name="text">
+                                                    <string>Felhasználónév:</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="username_textbox"/>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_3">
+                                        <item>
+                                            <widget class="QLabel" name="password_label">
+                                                <property name="text">
+                                                    <string>Jelszó:</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="password_textbox">
+                                                <property name="echoMode">
+                                                    <enum>QLineEdit::Password</enum>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout">
+                                        <item>
+                                            <widget class="QPushButton" name="btn_server">
+                                                <property name="text">
+                                                    <string>Szerver</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="btn_client">
+                                                <property name="text">
+                                                    <string>Kliens</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="btn_login_cancel">
+                                                <property name="text">
+                                                    <string>Kilép</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                            </layout>
+                        </widget>
+                    </widget>
+                </widget>
+                <widget class="QWidget" name="tab_reg">
+                    <attribute name="title">
+                        <string>Regisztráció</string>
+                    </attribute>
+                    <widget class="QGroupBox" name="reg_groupbox">
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>10</y>
+                                <width>381</width>
+                                <height>171</height>
+                            </rect>
+                        </property>
+                        <property name="title">
+                            <string>GroupBox</string>
+                        </property>
+                        <widget class="QWidget" name="verticalLayoutWidget_2">
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>371</width>
+                                    <height>141</height>
+                                </rect>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_2">
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_6">
+                                        <item>
+                                            <widget class="QLabel" name="new_username_label">
+                                                <property name="text">
+                                                    <string>Felhasználónév:</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="new_username_textbox"/>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_9">
+                                        <item>
+                                            <widget class="QLabel" name="new_password_label">
+                                                <property name="text">
+                                                    <string>Jelszó:</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="new_password_textbox"/>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                                        <item>
+                                            <widget class="QLabel" name="new_confirmed_passw_label">
+                                                <property name="text">
+                                                    <string>Jelszó ismét:</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="new_confirmed_passw_textbox"/>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_8">
+                                        <item>
+                                            <widget class="QPushButton" name="btn_new_reg">
+                                                <property name="text">
+                                                    <string>Regisztráció</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="btn_reg_cancel">
+                                                <property name="text">
+                                                    <string>Kilép</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                            </layout>
+                        </widget>
+                    </widget>
+                </widget>
+            </widget>
+        </widget>
+        <widget class="QStatusBar" name="statusbar"/>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
