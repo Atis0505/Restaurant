@@ -6,80 +6,149 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>527</width>
-                <height>386</height>
+                <width>858</width>
+                <height>579</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="windowTitle">
             <string>Menü</string>
         </property>
-        <widget class="QWidget" name="verticalLayoutWidget">
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>511</width>
-                    <height>371</height>
-                </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-                <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_3">
-                        <item>
-                            <widget class="QPushButton" name="btn_italok">
-                                <property name="text">
-                                    <string>Italok</string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="btn_etelek">
-                                <property name="text">
-                                    <string>Ételek</string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="btn_menu">
-                                <property name="text">
-                                    <string>Napi menü</string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="btn_kapcsolat">
-                                <property name="text">
-                                    <string>Kapcsolat</string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="btn_rendeles_tartalom">
-                                <property name="text">
-                                    <string>Rendelés</string>
-                                </property>
-                            </widget>
-                        </item>
-                    </layout>
-                </item>
-                <item>
-                    <spacer name="horizontalSpacer">
-                        <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
+        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0" columnminimumwidth="0,0,0,0,0,0">
+            <item row="0" column="3">
+                <widget class="QPushButton" name="btn_kapcsolat">
+                    <property name="text">
+                        <string>Kapcsolat</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="0" column="2">
+                <widget class="QPushButton" name="btn_menu">
+                    <property name="text">
+                        <string>Napi menü</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="0" column="1">
+                <widget class="QPushButton" name="btn_etelek">
+                    <property name="text">
+                        <string>Ételek</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="3" column="0" colspan="4">
+                <widget class="QTableWidget" name="table_item_list">
+                    <column>
+                        <property name="text">
+                            <string>ID</string>
                         </property>
-                        <property name="sizeHint" stdset="0">
-                            <size>
-                                <width>40</width>
-                                <height>20</height>
-                            </size>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Név</string>
                         </property>
-                    </spacer>
-                </item>
-                <item>
-                    <widget class="QListView" name="listView"/>
-                </item>
-            </layout>
-        </widget>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Leírás</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Kategória</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Kiszerelés</string>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Ár</string>
+                        </property>
+                    </column>
+                </widget>
+            </item>
+            <item row="0" column="0" rowspan="3">
+                <widget class="QPushButton" name="btn_italok">
+                    <property name="text">
+                        <string>Italok</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="3" column="5">
+                <layout class="QVBoxLayout" name="verticalLayout">
+                    <item>
+                        <widget class="QSpinBox" name="spinBox_counter"/>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_add_item">
+                            <property name="text">
+                                <string>Hozzáad</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QTableWidget" name="table_order_list">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <column>
+                                <property name="text">
+                                    <string>Név</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Darab</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Ár</string>
+                                </property>
+                            </column>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLabel" name="label_result">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string/>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_order_items">
+                            <property name="text">
+                                <string>Megrendel</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_menu_cancel">
+                            <property name="text">
+                                <string>Kilép</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
     </widget>
     <resources/>
     <connections/>
