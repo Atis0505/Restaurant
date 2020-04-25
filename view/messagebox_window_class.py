@@ -7,14 +7,15 @@ from PyQt5.QtWidgets import QMessageBox
 class MessageBoxType(Enum):
     REGULAR_INFO = 0
     ERROR = 1
-    NO_PERMISSION_RETRY = 2
+    QUESTION = 2
 
 
-class messagebox(QMessageBox):
+class Messagebox(QMessageBox):
 
-    def __init__(self, text: str, message_type):
+    def __init__(self, text: str, message_type: MessageBoxType):
         QMessageBox.__init__(self)
         self.title = "RM System"
+        self.message_type = message_type
         self.setWindowTitle(self.title)
         self.setText(text)
         self.window_execution()
@@ -25,7 +26,7 @@ class messagebox(QMessageBox):
         elif self.message_type == MessageBoxType.ERROR:
             self.setIcon(QMessageBox.Critical)
             self.exec_()
-        elif self.message_type == MessageBoxType.NO_PERMISSION_RETRY:
+        elif self.message_type == MessageBoxType.QUESTION:
             self.setIcon(QMessageBox.Warning)
-            self.setStandardButtons(QMessageBox.Retry | QMessageBox.Cancel)
-            return self.exec_() == QMessageBox.Retry
+            self.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+            return self.exec_() == QMessageBox.Yes
