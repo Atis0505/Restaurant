@@ -2,13 +2,13 @@ from enum import Enum
 
 
 class InitSqlCommands(Enum):
-    CREATE_USER_TABLE = """CREATE TABLE IF NOT EXISTS Users(
+    CREATE_USER_TABLE = """CREATE TABLE IF NOT EXISTS User(
     UserID INTEGER PRIMARY KEY AUTOINCREMENT,
     UserName TEXT NOT NULL,
     Password TEXT NOT NULL,
     UNIQUE(UserName));"""
     CREATE_FOOD_CATEGORIES_TABLE = """
-    CREATE TABLE IF NOT EXISTS FoodCategories(
+    CREATE TABLE IF NOT EXISTS FoodCategory(
     FoodCategoryID INTEGER PRIMARY KEY,
     FoodCategoryName varchar(20) NOT NULL,
     Discount INTEGER,
@@ -24,7 +24,7 @@ class InitSqlCommands(Enum):
     PicturePath varchar(150),
     FOREIGN KEY(FoodCategory) REFERENCES FoodCategories(FoodCategoryID));"""
     CREATE_DRINK_CATEGORIES_TABLE = """
-    CREATE TABLE IF NOT EXISTS DrinkCategories(
+    CREATE TABLE IF NOT EXISTS DrinkCategory(
     DrinkCategoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     DrinkCategoryName TEXT NOT NULL,
     AlcoholContent NUMERIC,
@@ -43,7 +43,7 @@ class InitSqlCommands(Enum):
     PicturePath varchar(150),
     FOREIGN KEY(DrinkCategory) REFERENCES DrinkCategories(DrinkCategoryID));"""
     CREATE_WORKER_TABLE = """
-    CREATE TABLE IF NOT EXISTS Workers(
+    CREATE TABLE IF NOT EXISTS Worker(
     WorkerID INTEGER PRIMARY KEY AUTOINCREMENT,
     WorkerName TEXT NOT NULL,
     WorkingHours INTEGER,
@@ -51,7 +51,7 @@ class InitSqlCommands(Enum):
     EndDate NUMERIC);"""
     CREATE_ORDER_TABLE = """
     CREATE TABLE IF NOT EXISTS RestaurantOrder(
-    OrderID INTEGER PRIMARY KEY AUTOINCREMENT,
+    RestaurantOrderID INTEGER PRIMARY KEY AUTOINCREMENT,
     OrderName TEXT NOT NULL,
     TimeStamp NUMERIC,
     WorkerID INTEGER NOT NULL,
@@ -59,7 +59,7 @@ class InitSqlCommands(Enum):
     Paid NUMERIC,
     FOREIGN KEY(WorkerID) REFERENCES Worker(WorkerID));"""
     CREATE_RESERVATIONS_TABLE = """
-    CREATE TABLE IF NOT EXISTS Reservations(
+    CREATE TABLE IF NOT EXISTS Reservation(
     ReservationID INTEGER PRIMARY KEY AUTOINCREMENT,
     ReservationName TEXT NOT NULL,
     PeopleNumber INTEGER,
