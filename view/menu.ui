@@ -7,7 +7,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>858</width>
-                <height>579</height>
+                <height>572</height>
             </rect>
         </property>
         <property name="sizePolicy">
@@ -19,29 +19,8 @@
         <property name="windowTitle">
             <string>Menü</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0" columnminimumwidth="0,0,0,0,0,0">
-            <item row="0" column="3">
-                <widget class="QPushButton" name="btn_kapcsolat">
-                    <property name="text">
-                        <string>Kapcsolat</string>
-                    </property>
-                </widget>
-            </item>
-            <item row="0" column="2">
-                <widget class="QPushButton" name="btn_menu">
-                    <property name="text">
-                        <string>Napi menü</string>
-                    </property>
-                </widget>
-            </item>
-            <item row="0" column="1">
-                <widget class="QPushButton" name="btn_etelek">
-                    <property name="text">
-                        <string>Ételek</string>
-                    </property>
-                </widget>
-            </item>
-            <item row="3" column="0" colspan="4">
+        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0">
+            <item row="7" column="0" colspan="4">
                 <widget class="QTableWidget" name="table_item_list">
                     <column>
                         <property name="text">
@@ -75,14 +54,7 @@
                     </column>
                 </widget>
             </item>
-            <item row="0" column="0" rowspan="3">
-                <widget class="QPushButton" name="btn_italok">
-                    <property name="text">
-                        <string>Italok</string>
-                    </property>
-                </widget>
-            </item>
-            <item row="3" column="5">
+            <item row="7" column="5">
                 <layout class="QVBoxLayout" name="verticalLayout">
                     <item>
                         <widget class="QSpinBox" name="spinBox_counter"/>
@@ -147,6 +119,51 @@
                         </widget>
                     </item>
                 </layout>
+            </item>
+            <item row="1" column="0" colspan="3">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <item>
+                        <widget class="QPushButton" name="btn_italok">
+                            <property name="text">
+                                <string>Italok</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_etelek">
+                            <property name="text">
+                                <string>Ételek</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_menu">
+                            <property name="text">
+                                <string>Napi menü</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_kapcsolat">
+                            <property name="text">
+                                <string>Kapcsolat</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="2" column="1">
+                <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </item>
         </layout>
     </widget>

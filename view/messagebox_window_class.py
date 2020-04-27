@@ -12,21 +12,28 @@ class MessageBoxType(Enum):
 
 class Messagebox(QMessageBox):
 
-    def __init__(self, text: str, message_type: MessageBoxType):
-        QMessageBox.__init__(self)
+    def __init__(self):
+        super().__init__()
         self.title = "RM System"
-        self.message_type = message_type
         self.setWindowTitle(self.title)
-        self.setText(text)
-        self.window_execution()
 
-    def window_execution(self) -> Optional[bool]:
-        if self.message_type == MessageBoxType.REGULAR_INFO:
+    def window_execution(self, text: str, message_type: MessageBoxType) -> Optional[bool]:
+        if message_type == MessageBoxType.REGULAR_INFO:
+            self.setText(text)
             self.exec_()
-        elif self.message_type == MessageBoxType.ERROR:
+        elif message_type == MessageBoxType.ERROR:
             self.setIcon(QMessageBox.Critical)
+            self.setText(text)
             self.exec_()
-        elif self.message_type == MessageBoxType.QUESTION:
+        elif message_type == MessageBoxType.QUESTION:
+            self.setText(text)
             self.setIcon(QMessageBox.Warning)
             self.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-            return self.exec_() == QMessageBox.Yes
+            self.activateWindow()
+            self.show()
+            result = self.exec_()
+            if result == QMessageBox.Yes:
+                ans = True
+            else:
+                ans = False
+            return ans

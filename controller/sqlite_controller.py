@@ -1,10 +1,10 @@
 import os
 import sqlite3 as sql
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Dict
 
-from controller.config import Config
-from controller.default_database import InitSqlCommands
+from model.config import Config
+from model.default_database import InitSqlCommands
 from view.messagebox_window_class import Messagebox, MessageBoxType
 
 
@@ -21,10 +21,11 @@ class SqliteController:
         self.__db_path = config.get_db_path() + r'\RMsystem.db'
         self.__conn = None
         self.cursor = None
+        self.message_box = Messagebox()
         if self.__db_path:
             self.__open(self.__db_path)
         else:
-            Messagebox('Database path is missing!', MessageBoxType.ERROR)
+            self.message_box.window_execution('Database path is missing!', MessageBoxType.ERROR)
 
     def __open(self, path):
         try:
@@ -36,7 +37,7 @@ class SqliteController:
                 self.cursor = self.__conn.cursor()
                 self.__create_default_db()
         except sql.Error as e:
-            Messagebox(f'Hiba az adatbázisban\n{e}!', MessageBoxType.ERROR)
+            self.message_box.window_execution(f'Hiba az adatbázisban\n{e}!', MessageBoxType.ERROR)
 
     def __create_default_db(self):
         for command in InitSqlCommands:
@@ -46,12 +47,13 @@ class SqliteController:
         self.cursor.execute("INSERT INTO User (UserName, Password) VALUES (?,?)", admin_params)
         self.__conn.commit()
 
-    def execute_command(self, operation: Operation, table_name: str, datas) -> Optional[List[str]]:
+    def execute_command(self, operation: Operation, table_name: str, datas: List[Dict[str, str]]) -> Optional[
+        List[str]]:
         try:
             if operation is Operation.INSERT:
-                values_string = ', '.join(value if type(value) is not str else f"'{value}'" for value in datas)
-                query = f"INSERT INTO {table_name} ({', '.join(['?'] * len(datas))}) VALUES ({values_string})"
-                self.cursor.execute(query)
+                columns_srting = ', '.join([key for key in datas[0].keys()])
+                query = f"INSERT INTO {table_name} ({columns_srting}) VALUES ({', '.join([' ?'] * len(datas[0]))})"
+                self.cursor.execute(query, tuple([value for value in datas[0].values()]))
             elif operation is Operation.SELECT:
                 column_string = "*"
                 condition_string = ''
@@ -60,12 +62,12 @@ class SqliteController:
                         column_string = ", ".join([column for column in data])
                     if type(data) is dict:
                         condition_string = f" WHERE "
-                        first_flag = True
+                        flag = len(data) - 1
                         for key, value in data.items():
                             condition_string += f"{key} = '{value}'"
-                            if first_flag:
+                            if flag:
                                 condition_string += " AND "
-                            first_flag = False
+                            flag -= 1
                 query = f"SELECT {column_string} FROM {table_name}{condition_string}"
                 print(query)
                 c = self.cursor.execute(query)
@@ -77,7 +79,7 @@ class SqliteController:
             elif operation is Operation.DELETE:
                 query = f"DELETE FROM {table_name} WHERE {table_name + 'ID'} = {datas[0]}"
         except sql.Error as e:
-            Messagebox('Operation hiba!\n{e}', MessageBoxType.ERROR)
+            self.message_box.window_execution(f'Operation hiba!\n{e}', MessageBoxType.ERROR)
         self.__close_db()
 
     def __close_db(self):

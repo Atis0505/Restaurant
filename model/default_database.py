@@ -10,38 +10,34 @@ class InitSqlCommands(Enum):
     CREATE_FOOD_CATEGORIES_TABLE = """
     CREATE TABLE IF NOT EXISTS FoodCategory(
     FoodCategoryID INTEGER PRIMARY KEY,
-    FoodCategoryName varchar(20) NOT NULL,
-    Discount INTEGER,
-    PicturePath varchar(150));"""
+    FoodCategoryName TEXT NOT NULL,
+    Description TEXT,
+    Discount INTEGER);"""
     CREATE_FOOD_TABLE = """
     CREATE TABLE IF NOT EXISTS FoodItem(
     FoodItemID INTEGER PRIMARY KEY AUTOINCREMENT,
     FoodName TEXT NOT NULL,
-    Quantity INTEGER,
+    Description TEXT,
     UnitPrice INTEGER NOT NULL,
-    FoodCategory INTEGER NOT NULL,
+    FoodCategory INTEGER,
     Discount INTEGER,
-    PicturePath varchar(150),
-    FOREIGN KEY(FoodCategory) REFERENCES FoodCategories(FoodCategoryID));"""
+    FOREIGN KEY(FoodCategory) REFERENCES FoodCategory(FoodCategoryID));"""
     CREATE_DRINK_CATEGORIES_TABLE = """
     CREATE TABLE IF NOT EXISTS DrinkCategory(
     DrinkCategoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     DrinkCategoryName TEXT NOT NULL,
-    AlcoholContent NUMERIC,
-    AlcoholDegree TEXT,
+    Description TEXT,
+    AlcoholContent INTEGER,
     Discount INT);"""
     CREATE_DRINK_TABLE = """
-    CREATE TABLE IF NOT EXISTS DrinkItemID(
+    CREATE TABLE IF NOT EXISTS DrinkItem(
     DrinkItemID INTEGER PRIMARY KEY AUTOINCREMENT,
     DrinkItemName TEXT NOT NULL,
-    Quantity INTEGER,
+    Description TEXT,
     UnitPrice INTEGER,
-    Size NUMERIC,
-    Unit varhcar(20),
-    DrinkCategory INTEGER NOT NULL,
+    DrinkCategory INTEGER,
     Discount INTEGER,
-    PicturePath varchar(150),
-    FOREIGN KEY(DrinkCategory) REFERENCES DrinkCategories(DrinkCategoryID));"""
+    FOREIGN KEY(DrinkCategory) REFERENCES DrinkCategory(DrinkCategoryID));"""
     CREATE_WORKER_TABLE = """
     CREATE TABLE IF NOT EXISTS Worker(
     WorkerID INTEGER PRIMARY KEY AUTOINCREMENT,

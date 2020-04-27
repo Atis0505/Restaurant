@@ -1,5 +1,6 @@
 from qtpy import uic
 
+from controller.sqlite_controller import SqliteController, Operation
 from model.order_status import OrderStatus
 from view.order_window_class import OrderWidnow
 
@@ -14,10 +15,14 @@ class MenuWindow(base_menu, form_menu):
         if not order_list:
             self.order_list = OrderStatus([])
         self.setupUi(self)
+        self.get_italok()
+        self.sql = SqliteController()
         self.btn_italok.clicked.connect(self.get_italok)
-        self.btn_rendeles_tartalom.clicked.connect(self.get_order_list)
+        # self.btn_rendeles_tartalom.clicked.connect(self.get_order_list)
 
     def get_italok(self):
+        if self.sql.execute_command(Operation.SELECT, 'DrinkItemID', []):
+            rows = self.sql.execute_command(Operation.SELECT, 'DrinkItemID', [])
         self.order_list.add_new_item('cola')
         for index, order in enumerate(self.order_list.get_ordered_list()):
             print(f'index:{index}, item:{order}')
