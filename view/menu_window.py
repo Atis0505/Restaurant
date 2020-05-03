@@ -6,13 +6,14 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_menu_dialog(object):
     def setupUi(self, menu_dialog):
         menu_dialog.setObjectName("menu_dialog")
-        menu_dialog.resize(858, 572)
+        menu_dialog.resize(865, 572)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -28,7 +29,7 @@ class Ui_menu_dialog(object):
         self.table_item_list.setSizePolicy(sizePolicy)
         self.table_item_list.setObjectName("table_item_list")
         self.table_item_list.setColumnCount(6)
-        self.table_item_list.setRowCount(10)
+        self.table_item_list.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.table_item_list.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -44,12 +45,6 @@ class Ui_menu_dialog(object):
         self.gridLayout.addWidget(self.table_item_list, 7, 0, 1, 4)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.spinBox_counter = QtWidgets.QSpinBox(menu_dialog)
-        self.spinBox_counter.setObjectName("spinBox_counter")
-        self.verticalLayout.addWidget(self.spinBox_counter)
-        self.btn_add_item = QtWidgets.QPushButton(menu_dialog)
-        self.btn_add_item.setObjectName("btn_add_item")
-        self.verticalLayout.addWidget(self.btn_add_item)
         self.table_order_list = QtWidgets.QTableWidget(menu_dialog)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -75,6 +70,22 @@ class Ui_menu_dialog(object):
         self.label_result.setText("")
         self.label_result.setObjectName("label_result")
         self.verticalLayout.addWidget(self.label_result)
+        self.label_result_under_order_table = QtWidgets.QLabel(menu_dialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_result_under_order_table.sizePolicy().hasHeightForWidth())
+        self.label_result_under_order_table.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_result_under_order_table.setFont(font)
+        self.label_result_under_order_table.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.label_result_under_order_table.setText("")
+        self.label_result_under_order_table.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_result_under_order_table.setObjectName("label_result_under_order_table")
+        self.verticalLayout.addWidget(self.label_result_under_order_table)
         self.btn_order_items = QtWidgets.QPushButton(menu_dialog)
         self.btn_order_items.setObjectName("btn_order_items")
         self.verticalLayout.addWidget(self.btn_order_items)
@@ -103,7 +114,6 @@ class Ui_menu_dialog(object):
         self.retranslateUi(menu_dialog)
         QtCore.QMetaObject.connectSlotsByName(menu_dialog)
 
-
     def retranslateUi(self, menu_dialog):
         _translate = QtCore.QCoreApplication.translate
         menu_dialog.setWindowTitle(_translate("menu_dialog", "Menü"))
@@ -119,7 +129,6 @@ class Ui_menu_dialog(object):
         item.setText(_translate("menu_dialog", "Kiszerelés"))
         item = self.table_item_list.horizontalHeaderItem(5)
         item.setText(_translate("menu_dialog", "Ár"))
-        self.btn_add_item.setText(_translate("menu_dialog", "Hozzáad"))
         item = self.table_order_list.horizontalHeaderItem(0)
         item.setText(_translate("menu_dialog", "Név"))
         item = self.table_order_list.horizontalHeaderItem(1)

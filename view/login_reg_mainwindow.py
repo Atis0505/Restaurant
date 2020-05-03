@@ -170,7 +170,7 @@ class Ui_login_reg_mainwindow(object):
                                             [{'UserName': login_user_name, 'Password': login_passw,
                                               'UserID': '1'}])) > 0:
                 print('Server login done!')
-                self.open_client_dialog()
+                self.open_server_dialog()
             else:
                 self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
         else:
@@ -181,9 +181,7 @@ class Ui_login_reg_mainwindow(object):
             if len(self.sql.execute_command(Operation.SELECT, 'User',
                                             [{'UserName': login_user_name, 'Password': login_passw}])) > 0:
                 print('Client login done!')
-                self.main = MenuWindow()
-                self.main.show()
-                self.close()
+                self.open_client_dialog()
             else:
                 self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
         else:
@@ -209,6 +207,9 @@ class Ui_login_reg_mainwindow(object):
             self.message_box.window_execution('Összes mező kitöltése kötelező!', MessageBoxType.ERROR)
 
     def close_main_window(self):
+        sys.exit()
+
+    def exit_program(self):
         sys.exit()
 
     def open_client_dialog(self):

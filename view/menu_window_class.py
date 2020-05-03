@@ -1,3 +1,4 @@
+import sys
 from enum import Enum
 from typing import List, Union
 
@@ -37,6 +38,8 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         self.table_item_list.cellClicked.connect(self.add_item_to_order)
         self.table_item_list.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.table_order_list.cellClicked.connect(self.delete_item_from_order)
+        self.btn_order_items.clicked.connect(self.send_order)
+        self.btn_menu_cancel.clicked.connect(self.close_menu_window)
 
         # self.btn_rendeles_tartalom.clicked.connect(self.get_order_list)
 
@@ -153,3 +156,9 @@ class MenuWindow(QDialog, Ui_menu_dialog):
             else:
                 self.ordered_dict_for_order_qtable[order_item] = 1
         print('OK')
+
+    def send_order(self):
+        pass
+
+    def close_menu_window(self):
+        sys.exit()
