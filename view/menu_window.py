@@ -6,7 +6,6 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtWidgets
 
 
@@ -14,7 +13,7 @@ class Ui_menu_dialog(object):
     def setupUi(self, menu_dialog):
         menu_dialog.setObjectName("menu_dialog")
         menu_dialog.resize(858, 572)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(menu_dialog.sizePolicy().hasHeightForWidth())
@@ -22,9 +21,14 @@ class Ui_menu_dialog(object):
         self.gridLayout = QtWidgets.QGridLayout(menu_dialog)
         self.gridLayout.setObjectName("gridLayout")
         self.table_item_list = QtWidgets.QTableWidget(menu_dialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.table_item_list.sizePolicy().hasHeightForWidth())
+        self.table_item_list.setSizePolicy(sizePolicy)
         self.table_item_list.setObjectName("table_item_list")
         self.table_item_list.setColumnCount(6)
-        self.table_item_list.setRowCount(0)
+        self.table_item_list.setRowCount(10)
         item = QtWidgets.QTableWidgetItem()
         self.table_item_list.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -47,7 +51,7 @@ class Ui_menu_dialog(object):
         self.btn_add_item.setObjectName("btn_add_item")
         self.verticalLayout.addWidget(self.btn_add_item)
         self.table_order_list = QtWidgets.QTableWidget(menu_dialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.table_order_list.sizePolicy().hasHeightForWidth())
@@ -80,24 +84,25 @@ class Ui_menu_dialog(object):
         self.gridLayout.addLayout(self.verticalLayout, 7, 5, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.btn_italok = QtWidgets.QPushButton(menu_dialog)
-        self.btn_italok.setObjectName("btn_italok")
-        self.horizontalLayout_2.addWidget(self.btn_italok)
-        self.btn_etelek = QtWidgets.QPushButton(menu_dialog)
-        self.btn_etelek.setObjectName("btn_etelek")
-        self.horizontalLayout_2.addWidget(self.btn_etelek)
+        self.btn_drinks = QtWidgets.QPushButton(menu_dialog)
+        self.btn_drinks.setObjectName("btn_drinks")
+        self.horizontalLayout_2.addWidget(self.btn_drinks)
+        self.btn_food = QtWidgets.QPushButton(menu_dialog)
+        self.btn_food.setObjectName("btn_food")
+        self.horizontalLayout_2.addWidget(self.btn_food)
         self.btn_menu = QtWidgets.QPushButton(menu_dialog)
         self.btn_menu.setObjectName("btn_menu")
         self.horizontalLayout_2.addWidget(self.btn_menu)
-        self.btn_kapcsolat = QtWidgets.QPushButton(menu_dialog)
-        self.btn_kapcsolat.setObjectName("btn_kapcsolat")
-        self.horizontalLayout_2.addWidget(self.btn_kapcsolat)
+        self.btn_contact = QtWidgets.QPushButton(menu_dialog)
+        self.btn_contact.setObjectName("btn_contact")
+        self.horizontalLayout_2.addWidget(self.btn_contact)
         self.gridLayout.addLayout(self.horizontalLayout_2, 1, 0, 1, 3)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 2, 1, 1, 1)
 
         self.retranslateUi(menu_dialog)
         QtCore.QMetaObject.connectSlotsByName(menu_dialog)
+
 
     def retranslateUi(self, menu_dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -123,10 +128,10 @@ class Ui_menu_dialog(object):
         item.setText(_translate("menu_dialog", "Ár"))
         self.btn_order_items.setText(_translate("menu_dialog", "Megrendel"))
         self.btn_menu_cancel.setText(_translate("menu_dialog", "Kilép"))
-        self.btn_italok.setText(_translate("menu_dialog", "Italok"))
-        self.btn_etelek.setText(_translate("menu_dialog", "Ételek"))
+        self.btn_drinks.setText(_translate("menu_dialog", "Italok"))
+        self.btn_food.setText(_translate("menu_dialog", "Ételek"))
         self.btn_menu.setText(_translate("menu_dialog", "Napi menü"))
-        self.btn_kapcsolat.setText(_translate("menu_dialog", "Kapcsolat"))
+        self.btn_contact.setText(_translate("menu_dialog", "Kapcsolat"))
 
 
 if __name__ == "__main__":

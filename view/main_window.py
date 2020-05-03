@@ -35,24 +35,31 @@ class MainWindow(base_login, form_login):
         self.config_object.check_db_folder_exist()
 
     def login_into_server(self, login_user_name: str, login_passw: str):
-        if len(self.sql.execute_command(Operation.SELECT, 'User',
-                                        [{'UserName': login_user_name, 'Password': login_passw, 'UserID': '1'}])) > 0:
-            print('Server login done!')
-            self.main = ServerWindow()
-            self.main.show()
-            self.close()
+        if self.username_textbox.text() != '' or self.password_textbox.text() != '':
+            if len(self.sql.execute_command(Operation.SELECT, 'User',
+                                            [{'UserName': login_user_name, 'Password': login_passw,
+                                              'UserID': '1'}])) > 0:
+                print('Server login done!')
+                self.main = ServerWindow()
+                self.main.show()
+                self.close()
+            else:
+                self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
         else:
-            self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
+            self.message_box.window_execution('Minden mező kitöltése kötelező!', MessageBoxType.ERROR)
 
     def login_into_client(self, login_user_name: str, login_passw: str):
-        if len(self.sql.execute_command(Operation.SELECT, 'User',
-                                        [{'UserName': login_user_name, 'Password': login_passw}])) > 0:
-            print('Client login done!')
-            self.main = MenuWindow()
-            self.main.show()
-            self.close()
+        if self.username_textbox.text() != '' or self.password_textbox.text() != '':
+            if len(self.sql.execute_command(Operation.SELECT, 'User',
+                                            [{'UserName': login_user_name, 'Password': login_passw}])) > 0:
+                print('Client login done!')
+                self.main = MenuWindow()
+                self.main.show()
+                self.close()
+            else:
+                self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
         else:
-            self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
+            self.message_box.window_execution('Minden mező kitöltése kötelező!', MessageBoxType.ERROR)
 
     def new_user_reg(self, login_user_name: str, login_passw: str, confirm_passw: str):
         if self.new_username_textbox.text() != '' or self.new_confirmed_passw_textbox.text() != '' or self.new_password_textbox.text() != '':
@@ -63,13 +70,13 @@ class MainWindow(base_login, form_login):
                 self.new_username_textbox: QLineEdit()
                 self.new_username_textbox.setText('')
             else:
-                self.sql.execute_command(Operation.INSERT, 'User',
-                                         [{'UserName': login_user_name, 'Password': login_passw}])
-                if self.message_box.window_execution('Sikeres regisztráció! Szeretne bejelentkezni?',
-                                                     MessageBoxType.QUESTION):
-                    self.main = MenuWindow()
-                    self.main.show()
-                    self.close()
+                try:
+                    self.sql.execute_command(Operation.INSERT, 'User',
+                                             [{'UserName': login_user_name, 'Password': login_passw}])
+                    self.message_box.window_execution('Sikeres regisztráció!',
+                                                      MessageBoxType.REGULAR_INFO)
+                except Exception as e:
+                    self.message_box.window_execution(f'Hiba: {e}', MessageBoxType.ERROR)
         else:
             self.message_box.window_execution('Összes mező kitöltése kötelező!', MessageBoxType.ERROR)
         # query = f'{login_user_name, login_passw, confirm_passw}'

@@ -11,7 +11,7 @@
             </rect>
         </property>
         <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
             </sizepolicy>
@@ -22,6 +22,12 @@
         <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0">
             <item row="7" column="0" colspan="4">
                 <widget class="QTableWidget" name="table_item_list">
+                    <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <column>
                         <property name="text">
                             <string>ID</string>
@@ -69,7 +75,7 @@
                     <item>
                         <widget class="QTableWidget" name="table_order_list">
                             <property name="sizePolicy">
-                                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
@@ -123,14 +129,14 @@
             <item row="1" column="0" colspan="3">
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                     <item>
-                        <widget class="QPushButton" name="btn_italok">
+                        <widget class="QPushButton" name="btn_drinks">
                             <property name="text">
                                 <string>Italok</string>
                             </property>
                         </widget>
                     </item>
                     <item>
-                        <widget class="QPushButton" name="btn_etelek">
+                        <widget class="QPushButton" name="btn_food">
                             <property name="text">
                                 <string>Ételek</string>
                             </property>
@@ -144,7 +150,7 @@
                         </widget>
                     </item>
                     <item>
-                        <widget class="QPushButton" name="btn_kapcsolat">
+                        <widget class="QPushButton" name="btn_contact">
                             <property name="text">
                                 <string>Kapcsolat</string>
                             </property>

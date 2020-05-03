@@ -80,7 +80,7 @@ class SqliteController:
                 query = f"DELETE FROM {table_name} WHERE {table_name + 'ID'} = {datas[0]}"
         except sql.Error as e:
             self.message_box.window_execution(f'Operation hiba!\n{e}', MessageBoxType.ERROR)
-        self.__close_db()
+        # self.__close_db()
 
     def __close_db(self):
         self.__conn.commit()

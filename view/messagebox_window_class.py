@@ -25,15 +25,15 @@ class Messagebox(QMessageBox):
             self.setIcon(QMessageBox.Critical)
             self.setText(text)
             self.exec_()
-        elif message_type == MessageBoxType.QUESTION:
-            self.setText(text)
-            self.setIcon(QMessageBox.Warning)
-            self.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-            self.activateWindow()
-            self.show()
-            result = self.exec_()
-            if result == QMessageBox.Yes:
-                ans = True
-            else:
-                ans = False
-            return ans
+        # elif message_type == MessageBoxType.QUESTION:
+        #     self.setText(text)
+        #     self.setIcon(QMessageBox.Warning)
+        #     self.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        #     self.activateWindow()
+        #     self.show()
+        #     result = self.exec_()
+        #     if result == QMessageBox.Yes:
+        #         ans = True
+        #     else:
+        #         ans = False
+        #     return ans

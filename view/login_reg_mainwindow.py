@@ -7,6 +7,19 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QLineEdit
+
+# from view.menu_window import Ui_menu_dialog
+#
+# class Ui_menu(QDialog, Ui_menu_dialog):
+#     def __init__(self, parent=None):
+#         QDialog.__init__(self, parent)
+#         self.setupUi(self)
+from controller.sqlite_controller import SqliteController, Operation
+from model.config import Config
+from view.menu_window_class import MenuWindow
+from view.messagebox_window_class import Messagebox, MessageBoxType
+from view.server_window_class import ServerWindow
 
 
 class Ui_login_reg_mainwindow(object):
@@ -117,9 +130,92 @@ class Ui_login_reg_mainwindow(object):
         self.statusbar.setObjectName("statusbar")
         login_reg_mainwindow.setStatusBar(self.statusbar)
 
+        """My code"""
+        self.config_object = Config()
+        self.client_dialog = MenuWindow()
+        self.server_dialog = ServerWindow()
+        self.message_box = Messagebox()
+        self.btn_server.clicked.connect(
+            lambda: self.login_into_server(self.username_textbox.text(), self.password_textbox.text()))
+        self.btn_client.clicked.connect(
+            lambda: self.login_into_client(self.username_textbox.text(), self.password_textbox.text()))
+        self.btn_new_reg.clicked.connect(
+            lambda: self.new_user_reg(self.new_username_textbox.text(), self.new_password_textbox.text(),
+                                      self.new_confirmed_passw_textbox.text()))
+        self.btn_login_cancel.clicked.connect(self.close_main_window)
+        self.btn_reg_cancel.clicked.connect(self.close_main_window)
+        self.configuration_start()
+        self.db_path = self.config_object.get_db_path()
+        self.sql = SqliteController()
+        self.btn_client.clicked.connect(
+            lambda: self.login_into_client(self.username_textbox.text(), self.password_textbox.text()))
+        self.btn_server.clicked.connect(
+            lambda: self.login_into_server(self.username_textbox.text(), self.password_textbox.text()))
+        self.btn_new_reg.clicked.connect(
+            lambda: self.new_user_reg(self.new_username_textbox.text(), self.new_password_textbox.text(),
+                                      self.new_confirmed_passw_textbox.text()))
+
         self.retranslateUi(login_reg_mainwindow)
         self.login_reg_tab_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(login_reg_mainwindow)
+
+    """My methods"""
+
+    def configuration_start(self):
+        self.config_object.check_db_folder_exist()
+
+    def login_into_server(self, login_user_name: str, login_passw: str):
+        if self.username_textbox.text() != '' or self.password_textbox.text() != '':
+            if len(self.sql.execute_command(Operation.SELECT, 'User',
+                                            [{'UserName': login_user_name, 'Password': login_passw,
+                                              'UserID': '1'}])) > 0:
+                print('Server login done!')
+                self.open_client_dialog()
+            else:
+                self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
+        else:
+            self.message_box.window_execution('Minden mező kitöltése kötelező!', MessageBoxType.ERROR)
+
+    def login_into_client(self, login_user_name: str, login_passw: str):
+        if self.username_textbox.text() != '' or self.password_textbox.text() != '':
+            if len(self.sql.execute_command(Operation.SELECT, 'User',
+                                            [{'UserName': login_user_name, 'Password': login_passw}])) > 0:
+                print('Client login done!')
+                self.main = MenuWindow()
+                self.main.show()
+                self.close()
+            else:
+                self.message_box.window_execution('Hibás jelszó vagy felhasználónév!', MessageBoxType.ERROR)
+        else:
+            self.message_box.window_execution('Minden mező kitöltése kötelező!', MessageBoxType.ERROR)
+
+    def new_user_reg(self, login_user_name: str, login_passw: str, confirm_passw: str):
+        if self.new_username_textbox.text() != '' or self.new_confirmed_passw_textbox.text() != '' or self.new_password_textbox.text() != '':
+            if login_passw != confirm_passw:
+                self.message_box.window_execution('A megadott jelszavak nem egyeznek meg!', MessageBoxType.REGULAR_INFO)
+            elif len((self.sql.execute_command(Operation.SELECT, 'User', [{'UserName': login_user_name}]))) > 0:
+                self.message_box.window_execution('Már létező felhasználónév!', MessageBoxType.REGULAR_INFO)
+                self.new_username_textbox: QLineEdit()
+                self.new_username_textbox.setText('')
+            else:
+                try:
+                    self.sql.execute_command(Operation.INSERT, 'User',
+                                             [{'UserName': login_user_name, 'Password': login_passw}])
+                    self.message_box.window_execution('Sikeres regisztráció!',
+                                                      MessageBoxType.REGULAR_INFO)
+                except Exception as e:
+                    self.message_box.window_execution(f'Hiba: {e}', MessageBoxType.ERROR)
+        else:
+            self.message_box.window_execution('Összes mező kitöltése kötelező!', MessageBoxType.ERROR)
+
+    def close_main_window(self):
+        sys.exit()
+
+    def open_client_dialog(self):
+        self.client_dialog.show()
+
+    def open_server_dialog(self):
+        self.server_dialog.show()
 
     def retranslateUi(self, login_reg_mainwindow):
         _translate = QtCore.QCoreApplication.translate
