@@ -47,7 +47,48 @@ class SqliteController:
         self.cursor.execute("INSERT INTO User (UserName, Password) VALUES (?,?)", admin_params)
         self.__conn.commit()
 
-    def execute_command(self, operation: Operation, table_name: str, datas: List[Dict[str, str]]) -> Optional[
+    def execute_command(self, operation: Operation, main_table_name: str, column_names: List[str] = None,
+                        where_condition: Dict[str, str] = None, order_by: str = None,
+                        insertion_value_dict: Dict[str, str] = None, update_value_dict: Dict[str, str] = None,
+                        set_delete_id: int = None) -> List[str]:
+        try:
+            if operation is Operation.SELECT:
+                if column_names:
+                    column_name_string = ", ".join([column for column in column_names])
+                else:
+                    column_name_string = '*'
+                if where_condition:
+                    where_condition_string = " WHERE "
+                    flag = len(where_condition) - 1
+                    for key, value in where_condition.items():
+                        where_condition_string += f"{key} = '{value}'"
+                        if flag:
+                            where_condition_string += " AND "
+                        flag -= 1
+                else:
+                    where_condition_string = ''
+                if order_by:
+                    order_by_string = f" ORDER BY {order_by}"
+                else:
+                    order_by_string = ''
+                select_query_string = f"SELECT {column_name_string} FROM {main_table_name}{where_condition_string}{order_by_string}"
+                print(select_query_string)
+                c = self.cursor.execute(select_query_string)
+                rows = c.fetchall()
+                return rows
+            elif operation is Operation.INSERT:
+                insertion_columns_string = ', '.join([key for key in insertion_value_dict.keys()])
+                insert_query_string = f"INSERT INTO {main_table_name} ({insertion_columns_string}) VALUES ({', '.join([' ?'] * len(insertion_value_dict.keys()))})"
+                self.cursor.execute(insert_query_string, tuple([value for value in insertion_value_dict.values()]))
+            elif operation is Operation.UPDATE:
+                for key, value in update_value_dict.items():
+                    update_query_string = f"UPDATE {main_table_name} SET {key} = '{value}' WHERE {main_table_name + 'ID'} = '{str(set_delete_id)}'"
+            elif operation is Operation.DELETE:
+                delete_query_string = f"DELETE FROM {main_table_name} WHERE {main_table_name + 'ID'} = '{str(set_delete_id)}'"
+        except sql.Error as e:
+            self.message_box.window_execution(f'Operation hiba!\n{e}', MessageBoxType.ERROR)
+
+    def execute_command_2(self, operation: Operation, table_name: str, datas: List[Dict[str, str]]) -> Optional[
         List[str]]:
         try:
             if operation is Operation.INSERT:

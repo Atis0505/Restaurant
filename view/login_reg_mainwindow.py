@@ -166,9 +166,9 @@ class Ui_login_reg_mainwindow(object):
 
     def login_into_server(self, login_user_name: str, login_passw: str):
         if self.username_textbox.text() != '' or self.password_textbox.text() != '':
-            if len(self.sql.execute_command(Operation.SELECT, 'User',
-                                            [{'UserName': login_user_name, 'Password': login_passw,
-                                              'UserID': '1'}])) > 0:
+            if len(self.sql.execute_command(operation=Operation.SELECT, main_table_name='User',
+                                            where_condition={'UserName': login_user_name, 'Password': login_passw,
+                                                             'UserID': '1'})) > 0:
                 print('Server login done!')
                 self.open_server_dialog()
             else:
@@ -178,8 +178,8 @@ class Ui_login_reg_mainwindow(object):
 
     def login_into_client(self, login_user_name: str, login_passw: str):
         if self.username_textbox.text() != '' or self.password_textbox.text() != '':
-            if len(self.sql.execute_command(Operation.SELECT, 'User',
-                                            [{'UserName': login_user_name, 'Password': login_passw}])) > 0:
+            if len(self.sql.execute_command(Operation.SELECT, main_table_name='User', where_condition=
+            {'UserName': login_user_name, 'Password': login_passw})) > 0:
                 print('Client login done!')
                 self.open_client_dialog()
             else:
@@ -191,14 +191,15 @@ class Ui_login_reg_mainwindow(object):
         if self.new_username_textbox.text() != '' or self.new_confirmed_passw_textbox.text() != '' or self.new_password_textbox.text() != '':
             if login_passw != confirm_passw:
                 self.message_box.window_execution('A megadott jelszavak nem egyeznek meg!', MessageBoxType.REGULAR_INFO)
-            elif len((self.sql.execute_command(Operation.SELECT, 'User', [{'UserName': login_user_name}]))) > 0:
+            elif len((self.sql.execute_command(Operation.SELECT, main_table_name='User',
+                                               where_condition={'UserName': login_user_name}))) > 0:
                 self.message_box.window_execution('Már létező felhasználónév!', MessageBoxType.REGULAR_INFO)
                 self.new_username_textbox: QLineEdit()
                 self.new_username_textbox.setText('')
             else:
                 try:
-                    self.sql.execute_command(Operation.INSERT, 'User',
-                                             [{'UserName': login_user_name, 'Password': login_passw}])
+                    self.sql.execute_command(Operation.INSERT, main_table_name='User', where_condition=
+                    {'UserName': login_user_name, 'Password': login_passw})
                     self.message_box.window_execution('Sikeres regisztráció!',
                                                       MessageBoxType.REGULAR_INFO)
                 except Exception as e:

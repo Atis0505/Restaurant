@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog
 
-from controller.sqlite_controller import SqliteController
+from controller.sqlite_controller import SqliteController, Operation
 from view.messagebox_window_class import Messagebox
 from view.server_window import Ui_server_window
 
@@ -17,10 +17,12 @@ class ServerWindow(QDialog, Ui_server_window):
 
     def get_selected_tabwidget_on_main(self, index=0):
         if index == 0:
+            self.get_actual_orders()
             self.get_soups()
         elif index == 1:
             """Paying tab"""
         elif index == 2:
+            self.get_menus()
             """Daily menu tab"""
         elif index == 3:
             """All supplier items tab"""
@@ -54,6 +56,8 @@ class ServerWindow(QDialog, Ui_server_window):
             self.get_shoots()
 
     def get_soups(self):
+        self.sql.execute_command(Operation.SELECT, 'FoodCategoryID')
+        self.sql.execute_command(Operation.SELECT, 'FoodItem', ['FoodCategoryID'])
         pass
 
     def get_salads(self):
