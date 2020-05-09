@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 from enum import Enum
 from typing import List, Union
 
@@ -33,15 +34,11 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         self.get_drinks()
         self.btn_drinks.clicked.connect(self.get_drinks)
         self.btn_food.clicked.connect(self.get_food)
-        self.btn_menu.clicked.connect(self.get_menu)
-        self.btn_contact.clicked.connect(self.get_contact)
         self.table_item_list.cellClicked.connect(self.add_item_to_order)
         self.table_item_list.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.table_order_list.cellClicked.connect(self.delete_item_from_order)
         self.btn_order_items.clicked.connect(self.send_order)
         self.btn_menu_cancel.clicked.connect(self.close_menu_window)
-
-        # self.btn_rendeles_tartalom.clicked.connect(self.get_order_list)
 
     def add_item_to_order(self, row, column):
         print(f'Row: {row}')
@@ -69,7 +66,6 @@ class MenuWindow(QDialog, Ui_menu_dialog):
                     for index_j, data in enumerate(row):
                         if data == None:
                             data = ''
-                        # self.table_item_list.setItem(index_i, index_j, OwnQTableWidgetItem(text=str(data), index=index_i, db_item=drink_item))
                         self.table_item_list.setItem(index_i, index_j,
                                                      QTableWidgetItem(str(data)))
             self.table_item_list.resizeColumnsToContents()
@@ -94,22 +90,15 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         except Exception as e:
             self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)
 
-    def get_menu(self):
-        # drink_list: List[DrinkItem] = []
-        # try:
-        #     rows = self.sql.execute_command(Operation.SELECT, 'DrinkItemID', [])
-        #     for index_i, row in enumerate(rows):
-        #         self.table_item_list.insertRow(index_i)
-        #         for index_j, data in enumerate(row):
-        #             if data == None:
-        #                 data = ''
-        #             self.table_item_list.setItem(index_i, index_j, QTableWidgetItem(str(data)))
-        # except Exception as e:
-        #     self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)
-        pass
-
-    def get_contact(self):
-        pass
+    def get_finally_price(self):
+        final_price = 0
+        for key, value in self.ordered_dict_for_order_qtable.items():
+            key: Union[DrinkItem, FoodItem]
+            if type(key) is DrinkItem:
+                final_price += int(key.drink_price) * value
+            elif type(key) is FoodItem:
+                final_price += int(key.food_price) * value
+        return final_price
 
     def refresh_order_table(self):
         self.clear_order_table()
@@ -130,6 +119,7 @@ class MenuWindow(QDialog, Ui_menu_dialog):
                 self.table_order_list.setItem(index_i, 2, QTableWidgetItem(
                     str(int(key_element.food_price) * self.ordered_dict_for_order_qtable[key_element])))
         self.table_order_list.resizeColumnsToContents()
+        self.label_final_price.setText(str(self.get_finally_price()))
 
     def clear_order_table(self):
         while (self.table_order_list.rowCount() > 0):
@@ -158,7 +148,27 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         print('OK')
 
     def send_order(self):
-        pass
+        self.sql.execute_command(Operation.INSERT, 'RestaurantOrder',
+                                 insertion_value_dict={'StartTime': str(datetime.today()).split(' ')[0], 'EndTime': '',
+                                                       'Price': str(self.get_finally_price()), 'Making': 1, 'Served': 0,
+                                                       'Paid': 0})
+        order_id = self.sql.execute_command(Operation.SELECT, 'RestaurantOrder', ['RestaurantOrderID'])[0]
+        for key, value in self.ordered_dict_for_order_qtable.items():
+            key: Union[DrinkItem, FoodItem]
+            if type(key) is DrinkItem:
+                print('DrinItem sent')
+                self.sql.execute_command(Operation.INSERT, 'RestaurantDrinkOrderItem',
+                                         insertion_value_dict={'RestaurantOrderID': str(order_id[0]),
+                                                               'DrinkItemID': key.drink_item_id, 'Quantity': value})
+            elif type(key) is FoodItem:
+                print('FoodItem sent')
+                self.sql.execute_command(Operation.INSERT, 'RestaurantFoodOrderItem',
+                                         insertion_value_dict={'RestaurantOrderID': str(order_id[0]),
+                                                               'FoodItemID': key.food_item_id, 'Quantity': value})
+        self.clear_order_table()
+        self.clear_item_table_list()
+        self.label_final_price.setText('')
+        self.get_drinks()
 
     def close_menu_window(self):
         sys.exit()

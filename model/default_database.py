@@ -62,3 +62,29 @@ class InitSqlCommands(Enum):
     TimeFrom NUMERIC,
     TimeTo NUMERIC,
     Price INTEGER);"""
+
+
+class DefaultDatabaseStructure:
+    CREATE_USER_TABLE = """CREATE TABLE IF NOT EXISTS User(
+    UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserName TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    UNIQUE(UserName));"""
+    CREATE_FOODITEM_CATEGORY_TABLE = """
+    CREATE TABLE IF NOT EXISTS FoodCategory(
+    FoodCategoryID INTEGER PRIMARY KEY,
+    FoodCategoryName TEXT NOT NULL,
+    Description TEXT,
+    Discount INTEGER);"""
+    CREATE_DRINKITEM_CATEGORY_TABLE = """
+    CREATE TABLE IF NOT EXISTS DrinkCategory(
+    DrinkCategoryID INTEGER PRIMARY KEY AUTOINCREMENT,
+    DrinkCategoryName TEXT NOT NULL,
+    Description TEXT,
+    AlcoholContent INTEGER,
+    Discount INT);"""
+    CREATE_ORDER_ITEM_TABLE = """"""
+    CREATE_FOODITEM_TABLE = """"""
+    CREATE_DRINKITEM_TABLE = """"""
+    CREATE_WORKER_TABLE = """"""
+    CREATE_PLACED_ORDER_TABLE = """"""

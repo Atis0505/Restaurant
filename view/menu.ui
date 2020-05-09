@@ -20,7 +20,7 @@
             <string>Menü</string>
         </property>
         <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0">
-            <item row="7" column="0" colspan="4">
+            <item row="8" column="0" colspan="4">
                 <widget class="QTableWidget" name="table_item_list">
                     <property name="sizePolicy">
                         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -60,7 +60,59 @@
                     </column>
                 </widget>
             </item>
-            <item row="7" column="5">
+            <item row="1" column="4">
+                <widget class="QLabel" name="label">
+                    <property name="text">
+                        <string>Végösszeg:</string>
+                    </property>
+                </widget>
+            </item>
+            <item row="3" column="1">
+                <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </item>
+            <item row="1" column="0" colspan="3">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <item>
+                        <widget class="QPushButton" name="btn_drinks">
+                            <property name="text">
+                                <string>Italok</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_food">
+                            <property name="text">
+                                <string>Ételek</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_menu">
+                            <property name="text">
+                                <string>Napi menü</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="btn_contact">
+                            <property name="text">
+                                <string>Kapcsolat</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="8" column="4" colspan="2">
                 <layout class="QVBoxLayout" name="verticalLayout">
                     <item>
                         <widget class="QTableWidget" name="table_order_list">
@@ -142,50 +194,19 @@
                     </item>
                 </layout>
             </item>
-            <item row="1" column="0" colspan="3">
-                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                    <item>
-                        <widget class="QPushButton" name="btn_drinks">
-                            <property name="text">
-                                <string>Italok</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="btn_food">
-                            <property name="text">
-                                <string>Ételek</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="btn_menu">
-                            <property name="text">
-                                <string>Napi menü</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="btn_contact">
-                            <property name="text">
-                                <string>Kapcsolat</string>
-                            </property>
-                        </widget>
-                    </item>
-                </layout>
-            </item>
-            <item row="2" column="1">
-                <spacer name="horizontalSpacer">
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+            <item row="1" column="5">
+                <widget class="QLabel" name="label_final_price">
+                    <property name="font">
+                        <font>
+                            <pointsize>12</pointsize>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                        </font>
                     </property>
-                    <property name="sizeHint" stdset="0">
-                        <size>
-                            <width>40</width>
-                            <height>20</height>
-                        </size>
+                    <property name="text">
+                        <string/>
                     </property>
-                </spacer>
+                </widget>
             </item>
         </layout>
     </widget>

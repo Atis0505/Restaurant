@@ -2,10 +2,11 @@ from dataclasses import dataclass
 
 
 @dataclass
-class OrderItem:
+class RestaurantOrder:
     order_id: int
     order_name: str
     time_stamp: str
-    worker_id: int
     price: int
+    making: int
+    served: int
     paid: int
