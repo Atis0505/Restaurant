@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class RestaurantOrder:
-    order_id: int
-    order_name: str
-    time_stamp: str
+    restaurant_order_id: int
+    start_time: str
+    end_time: str
     price: int
     making: int
     served: int

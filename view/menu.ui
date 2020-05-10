@@ -96,20 +96,6 @@
                             </property>
                         </widget>
                     </item>
-                    <item>
-                        <widget class="QPushButton" name="btn_menu">
-                            <property name="text">
-                                <string>Napi menü</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="btn_contact">
-                            <property name="text">
-                                <string>Kapcsolat</string>
-                            </property>
-                        </widget>
-                    </item>
                 </layout>
             </item>
             <item row="8" column="4" colspan="2">

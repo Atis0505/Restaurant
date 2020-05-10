@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDialog, QTableWidgetItem
 from controller.sqlite_controller import SqliteController, Operation
 from model.drink_item import DrinkItem
 from model.food_item import FoodItem
+from model.restaurant_order import RestaurantOrder
 from view.messagebox_window_class import Messagebox, MessageBoxType
 from view.server_window import Ui_server_window
 
@@ -26,7 +27,9 @@ class ServerWindow(QDialog, Ui_server_window):
         self.beer_list: List[DrinkItem] = []
         self.wein_list: List[DrinkItem] = []
         self.shoot_list: List[DrinkItem] = []
+        self.restaurant_order_list: List[RestaurantOrder] = []
         self.get_soups()
+        self.get_actual_orders()
         self.server_tabwidget.currentChanged.connect(self.get_selected_tabwidget_on_main)
         self.all_items_tab.currentChanged.connect(self.get_selected_tabwidget_on_secondary)
 
@@ -307,5 +310,29 @@ class ServerWindow(QDialog, Ui_server_window):
                         self.table_shoot_list.setItem(index_i, index_j,
                                                       QTableWidgetItem(str(data)))
             self.table_shoot_list.resizeColumnsToContents()
+        except Exception as e:
+            self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)
+
+    def get_actual_orders(self):
+        try:
+            rows = self.sql.execute_command(Operation.SELECT, main_table_name='RestaurantOrder')
+            for index_i, row in enumerate(rows):
+                restaurant_order = RestaurantOrder(*[inf for inf in row])
+                if restaurant_order not in self.restaurant_order_list:
+                    self.restaurant_order_list.append(restaurant_order)
+                    self.table_orders.insertRow(index_i)
+                    self.table_orders.setItem(index_i, 0, QTableWidgetItem(restaurant_order.restaurant_order_id))
+                    self.table_orders.setItem(index_i, 1, QTableWidgetItem(restaurant_order.start_time))
+                    self.table_orders.setItem(index_i, 2, QTableWidgetItem(restaurant_order.end_time))
+                    self.table_orders.setItem(index_i, 3, QTableWidgetItem(str(restaurant_order.price)))
+                    if restaurant_order.paid == 0:
+                        if restaurant_order.making == 1 and restaurant_order.served == 0:
+                            self.table_orders.setItem(index_i, 4, QTableWidgetItem('Készül'))
+                        if restaurant_order.making == 0 and restaurant_order.served == 1:
+                            self.table_orders.setItem(index_i, 4, QTableWidgetItem('Felszolgálva'))
+                        self.table_orders.setItem(index_i, 5, QTableWidgetItem('Nincs fizetve'))
+                    else:
+                        self.table_orders.setItem(index_i, 4, QTableWidgetItem('Végzett'))
+                        self.table_orders.setItem(index_i, 5, QTableWidgetItem('Fizetve'))
         except Exception as e:
             self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)

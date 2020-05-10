@@ -50,7 +50,18 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         self.refresh_order_table()
 
     def delete_item_from_order(self, row, column):
-        self.order_table_list.pop(row)
+        item = self.table_order_list.item(row, column)
+        not_deleted = True
+        i = 0
+        while (not_deleted):
+            if type(self.order_table_list[i]) is DrinkItem and self.order_table_list[i].drink_item_name == item.text():
+                self.order_table_list.pop(i)
+                not_deleted = False
+            elif type(self.order_table_list[i]) is FoodItem and self.order_table_list[i].food_item_name == item.text():
+                self.order_table_list.pop(i)
+                not_deleted = False
+            else:
+                i += 1
         self.refresh_order_table()
 
     def get_drinks(self):
@@ -149,7 +160,7 @@ class MenuWindow(QDialog, Ui_menu_dialog):
 
     def send_order(self):
         self.sql.execute_command(Operation.INSERT, 'RestaurantOrder',
-                                 insertion_value_dict={'StartTime': str(datetime.today()).split(' ')[0], 'EndTime': '',
+                                 insertion_value_dict={'StartTime': str(datetime.today()), 'EndTime': '',
                                                        'Price': str(self.get_finally_price()), 'Making': 1, 'Served': 0,
                                                        'Paid': 0})
         order_id = self.sql.execute_command(Operation.SELECT, 'RestaurantOrder', ['RestaurantOrderID'])[0]
@@ -168,6 +179,8 @@ class MenuWindow(QDialog, Ui_menu_dialog):
         self.clear_order_table()
         self.clear_item_table_list()
         self.label_final_price.setText('')
+        self.ordered_dict_for_order_qtable = {}
+        self.order_table_list = []
         self.get_drinks()
 
     def close_menu_window(self):

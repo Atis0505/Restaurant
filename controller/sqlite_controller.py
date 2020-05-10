@@ -79,6 +79,7 @@ class SqliteController:
             elif operation is Operation.INSERT:
                 insertion_columns_string = ', '.join([key for key in insertion_value_dict.keys()])
                 insert_query_string = f"INSERT INTO {main_table_name} ({insertion_columns_string}) VALUES ({', '.join([' ?'] * len(insertion_value_dict.keys()))})"
+                print(insert_query_string)
                 self.cursor.execute(insert_query_string, tuple([value for value in insertion_value_dict.values()]))
                 self.__conn.commit()
             elif operation is Operation.UPDATE:
