@@ -160,10 +160,11 @@ class MenuWindow(QDialog, Ui_menu_dialog):
 
     def send_order(self):
         self.sql.execute_command(Operation.INSERT, 'RestaurantOrder',
-                                 insertion_value_dict={'StartTime': str(datetime.today()), 'EndTime': '',
-                                                       'Price': str(self.get_finally_price()), 'Making': 1, 'Served': 0,
-                                                       'Paid': 0})
-        order_id = self.sql.execute_command(Operation.SELECT, 'RestaurantOrder', ['RestaurantOrderID'])[0]
+                                 insertion_value_dict={
+                                     'StartTime': str(datetime.today()).split('.')[0].replace('-', '.'), 'EndTime': '',
+                                     'Price': str(self.get_finally_price()), 'Making': 1, 'Served': 0,
+                                     'Paid': 0})
+        order_id = self.sql.execute_command(Operation.SELECT, 'RestaurantOrder', ['RestaurantOrderID'])[-1]
         for key, value in self.ordered_dict_for_order_qtable.items():
             key: Union[DrinkItem, FoodItem]
             if type(key) is DrinkItem:

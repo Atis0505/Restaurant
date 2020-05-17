@@ -1,6 +1,9 @@
-from typing import List
+from datetime import datetime
+from typing import List, Optional
 
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem
+from PyQt5.QtCore import QTimer, QRegExp
+from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QLineEdit
 
 from controller.sqlite_controller import SqliteController, Operation
 from model.drink_item import DrinkItem
@@ -15,6 +18,15 @@ class ServerWindow(QDialog, Ui_server_window):
         QDialog.__init__(self, parent)
         super().__init__()
         self.setupUi(self)
+        self.lineEdit_new_item_discount.setValidator(QRegExpValidator(QRegExp("\d+")))
+        self.lineEdit_new_item_unitprice.setValidator(QRegExpValidator(QRegExp("\d+")))
+        self.selected_order_id = None
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_timer_label)
+        self.timer.start(1000)
+        self.refresh_timer = QTimer(self)
+        self.refresh_timer.timeout.connect(self.get_actual_orders)
+        self.refresh_timer.start(30000)
         self.message_box = Messagebox()
         self.sql = SqliteController()
         self.soup_list: List[FoodItem] = []
@@ -30,26 +42,28 @@ class ServerWindow(QDialog, Ui_server_window):
         self.restaurant_order_list: List[RestaurantOrder] = []
         self.get_soups()
         self.get_actual_orders()
+        self.comboBox_new_item_type.addItems(['Ételek', 'Italok'])
+        self.comboBox_item_types.addItems(['Ételek', 'Italok'])
+        self.refresh_category()
+        self.refresh_items()
+        self.refresh_category_in_new_item_form()
+        self.table_orders.cellClicked.connect(self.get_selected_order_details)
         self.server_tabwidget.currentChanged.connect(self.get_selected_tabwidget_on_main)
         self.all_items_tab.currentChanged.connect(self.get_selected_tabwidget_on_secondary)
+        self.btn_order_delete.clicked.connect(self.delete_actual_order)
+        self.btn_paid.clicked.connect(self.set_paid)
+        self.comboBox_item_types.currentTextChanged.connect(self.refresh_category)
+        self.comboBox_item_category.currentTextChanged.connect(self.refresh_items)
+        self.comboBox_new_item_type.currentTextChanged.connect(self.refresh_category_in_new_item_form)
+        self.comboBox_items.currentText.connect(self.get_selected_item_details)
+        self.btn_save_new_item.clicked.connect(self.save_new_item)
 
     def get_selected_tabwidget_on_main(self, index=0):
         if index == 0:
             self.get_actual_orders()
             self.get_soups()
         elif index == 1:
-            """Paying tab"""
-        elif index == 2:
-            self.get_menus()
-            """Daily menu tab"""
-        elif index == 3:
-            """All supplier items tab"""
-        elif index == 4:
-            """Editing of daily menu tab"""
-        elif index == 5:
-            """Editing all supplier items tab"""
-        elif index == 6:
-            """Statistic tab"""
+            self.check_status()
 
     def get_selected_tabwidget_on_secondary(self, index):
         if index == 0:
@@ -312,27 +326,236 @@ class ServerWindow(QDialog, Ui_server_window):
             self.table_shoot_list.resizeColumnsToContents()
         except Exception as e:
             self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)
+        self.table_shoot_list.resizeColumnsToContents()
+
+    def update_timer_label(self):
+        self.label_actual_time.setText(datetime.strftime(datetime.now(), "%Y.%m.%d %H:%M:%S"))
 
     def get_actual_orders(self):
         try:
             rows = self.sql.execute_command(Operation.SELECT, main_table_name='RestaurantOrder')
+            del self.restaurant_order_list[:]
+            self.clear_orders_table()
             for index_i, row in enumerate(rows):
                 restaurant_order = RestaurantOrder(*[inf for inf in row])
-                if restaurant_order not in self.restaurant_order_list:
-                    self.restaurant_order_list.append(restaurant_order)
-                    self.table_orders.insertRow(index_i)
-                    self.table_orders.setItem(index_i, 0, QTableWidgetItem(restaurant_order.restaurant_order_id))
-                    self.table_orders.setItem(index_i, 1, QTableWidgetItem(restaurant_order.start_time))
-                    self.table_orders.setItem(index_i, 2, QTableWidgetItem(restaurant_order.end_time))
-                    self.table_orders.setItem(index_i, 3, QTableWidgetItem(str(restaurant_order.price)))
-                    if restaurant_order.paid == 0:
-                        if restaurant_order.making == 1 and restaurant_order.served == 0:
-                            self.table_orders.setItem(index_i, 4, QTableWidgetItem('Készül'))
-                        if restaurant_order.making == 0 and restaurant_order.served == 1:
-                            self.table_orders.setItem(index_i, 4, QTableWidgetItem('Felszolgálva'))
-                        self.table_orders.setItem(index_i, 5, QTableWidgetItem('Nincs fizetve'))
-                    else:
-                        self.table_orders.setItem(index_i, 4, QTableWidgetItem('Végzett'))
-                        self.table_orders.setItem(index_i, 5, QTableWidgetItem('Fizetve'))
+                self.restaurant_order_list.append(restaurant_order)
+                self.table_orders.insertRow(index_i)
+                self.table_orders.setItem(index_i, 0, QTableWidgetItem(str(restaurant_order.restaurant_order_id)))
+                self.table_orders.setItem(index_i, 1, QTableWidgetItem(restaurant_order.start_time))
+                self.table_orders.setItem(index_i, 2, QTableWidgetItem(restaurant_order.end_time))
+                self.table_orders.setItem(index_i, 3, QTableWidgetItem(str(restaurant_order.price)))
+                if restaurant_order.paid == 0:
+                    if restaurant_order.making == 1 and restaurant_order.served == 0:
+                        self.table_orders.setItem(index_i, 4, QTableWidgetItem('Készül'))
+                    if restaurant_order.making == 0 and restaurant_order.served == 1:
+                        self.table_orders.setItem(index_i, 4, QTableWidgetItem('Felszolgálva'))
+                    self.table_orders.setItem(index_i, 5, QTableWidgetItem('Nincs fizetve'))
+                else:
+                    self.table_orders.setItem(index_i, 4, QTableWidgetItem('Végzett'))
+                    self.table_orders.setItem(index_i, 5, QTableWidgetItem('Fizetve'))
+            self.table_orders.resizeColumnsToContents()
         except Exception as e:
             self.message_box.window_execution(f'Hiba a tábla feltöltésénél: \n{e}', MessageBoxType.ERROR)
+
+    def get_selected_order_details(self, row=None, column=None):
+        self.clear_item_table_list()
+        if not row:
+            row = 0
+        if self.table_orders.item(row, 0):
+            self.selected_order_id = self.table_orders.item(row, 0).text()
+            drink_tuple_list = self.sql.execute_command(Operation.SELECT, main_table_name='RestaurantDrinkOrderItem',
+                                                        where_condition={'RestaurantOrderID': str(
+                                                            self.table_orders.item(row, 0).text())})
+            drink_itemID_count_pairs = [tuple(y for y in x[2:]) for x in drink_tuple_list]
+            food_tuple_list = self.sql.execute_command(Operation.SELECT, main_table_name='RestaurantFoodOrderItem',
+                                                       where_condition={'RestaurantOrderID': str(
+                                                           self.table_orders.item(row, 0).text())})
+            food_itemID_count_pairs = [tuple(y for y in x[2:]) for x in food_tuple_list]
+            self.label_order_id.setText(self.selected_order_id)
+            self.label_order_status.setText(self.table_orders.item(row, 4).text())
+            self.label_result.setText(self.table_orders.item(row, 3).text())
+            self.label_order_time.setText(self.table_orders.item(row, 1).text())
+            self.check_status()
+
+            for index, tuple_data in enumerate(drink_itemID_count_pairs):
+                self.table_order_details.insertRow(index)
+                drink_obj = DrinkItem(*list(self.sql.execute_command(Operation.SELECT, main_table_name='DrinkItem',
+                                                                     where_condition={
+                                                                         'DrinkItemID': str(tuple_data[0])})[0]))
+                self.table_order_details.setItem(index, 0, QTableWidgetItem(str(tuple_data[1])))
+                self.table_order_details.setItem(index, 1, QTableWidgetItem(drink_obj.drink_item_name))
+                self.table_order_details.setItem(index, 2, QTableWidgetItem(str(drink_obj.drink_price * tuple_data[1])))
+
+            for index, tuple_data in enumerate(food_itemID_count_pairs):
+                shifted_index = index + len(drink_itemID_count_pairs)
+                self.table_order_details.insertRow(shifted_index)
+                food_obj = FoodItem(*list(self.sql.execute_command(Operation.SELECT, main_table_name='FoodItem',
+                                                                   where_condition={'FoodItemID': str(tuple_data[0])})[
+                                              0]))
+                self.table_order_details.setItem(shifted_index, 0, QTableWidgetItem(str(tuple_data[1])))
+                self.table_order_details.setItem(shifted_index, 1, QTableWidgetItem(food_obj.food_item_name))
+                self.table_order_details.setItem(shifted_index, 2,
+                                                 QTableWidgetItem(str(food_obj.food_price * tuple_data[1])))
+
+    def clear_item_table_list(self):
+        while (self.table_order_details.rowCount() > 0):
+            {
+                self.table_order_details.removeRow(0)
+            }
+
+    def clear_orders_table(self):
+        while (self.table_orders.rowCount() > 0):
+            {
+                self.table_orders.removeRow(0)
+            }
+
+    def delete_actual_order(self):
+        self.sql.execute_command(Operation.DELETE, main_table_name='RestaurantOrder', set_id=self.selected_order_id)
+        self.sql.execute_command(Operation.DELETE, main_table_name='RestaurantDrinkOrderItem',
+                                 set_id=self.selected_order_id)
+        self.sql.execute_command(Operation.DELETE, main_table_name='RestaurantFoodOrderItem',
+                                 set_id=self.selected_order_id)
+        self.clear_item_table_list()
+        self.label_result.setText('-')
+        self.label_order_time.setText('-')
+        self.label_order_status.setText('-')
+        self.label_order_id.setText('-')
+        selected_index = None
+        for index, order in enumerate(self.restaurant_order_list):
+            if order.restaurant_order_id == int(self.selected_order_id):
+                selected_index = index
+        self.restaurant_order_list.pop(selected_index)
+        self.table_orders.removeRow(selected_index)
+        self.get_actual_orders()
+        self.check_status()
+
+    def set_paid(self):
+        self.sql.execute_command(Operation.UPDATE, main_table_name='RestaurantOrder', set_id=self.selected_order_id,
+                                 update_value_dict={'Making': '0', 'Served': '0', 'Paid': '1',
+                                                    'EndTime': str(datetime.today()).split('.')[0].replace('-', '.')})
+        self.label_order_status.setText('Végzett')
+        self.get_actual_orders()
+        self.check_status()
+
+    def check_status(self):
+        if self.label_order_status.text() == 'Végzett' or self.label_order_status.text() == '-':
+            self.btn_paid.setEnabled(False)
+        else:
+            self.btn_paid.setEnabled(True)
+
+    def refresh_category(self):
+        if self.comboBox_item_types.currentText() == 'Ételek':
+            self.comboBox_item_category.clear()
+            self.comboBox_item_category.addItems(self.get_drink_categories())
+        elif self.comboBox_item_types.currentText() == 'Italok':
+            self.comboBox_item_category.clear()
+            self.comboBox_item_category.addItems(self.get_food_categories())
+
+    def refresh_items(self):
+        category_id = None
+        if self.comboBox_item_types.currentText() == 'Ételek':
+            self.comboBox_items.clear()
+            self.comboBox_items.addItems(self.get_fooditems_by_category_id(self.comboBox_item_category.currentText()))
+        elif self.comboBox_item_types.currentText() == 'Italok':
+            self.comboBox_items.clear()
+            self.comboBox_items.addItems(self.get_drinkitems_by_category_id(self.comboBox_item_category.currentText()))
+
+    def get_selected_item_details(self):
+        pass
+
+    def get_fooditems_by_category_id(self, category_name) -> List[str]:
+        food_list = None
+        category_id = [id[0] for id in self.sql.execute_command(Operation.SELECT, main_table_name='FoodCategory',
+                                                                column_names=['FoodCategoryID'], where_condition={
+                'FoodCategoryName': category_name})][0]
+        food_list = [name[0] for name in
+                     self.sql.execute_command(Operation.SELECT, main_table_name='FoodItem', column_names=['FoodName'],
+                                              where_condition={'FoodCategory': category_id})]
+        return food_list
+
+    def get_drinkitems_by_category_id(self, category_name) -> List[str]:
+        drink_list = None
+        category_id = [id[0] for id in self.sql.execute_command(Operation.SELECT, main_table_name='DrinkCategory',
+                                                                column_names=['DrinkCategoryID'], where_condition={
+                'DrinkCategoryName': category_name})][0]
+        drink_list = [name[0] for name in
+                      self.sql.execute_command(Operation.SELECT, main_table_name='DrinkItem',
+                                               column_names=['DrinkItemName'],
+                                               where_condition={'DrinkCategory': category_id})]
+        return drink_list
+
+    def get_drink_categories(self) -> List[str]:
+        drinks_categories = [name[0] for name in
+                             self.sql.execute_command(Operation.SELECT, main_table_name='FoodCategory',
+                                                      column_names=['FoodCategoryName'])]
+        return drinks_categories
+
+    def get_food_categories(self):
+        food_categories = [name[0] for name in
+                           self.sql.execute_command(Operation.SELECT, main_table_name='FoodCategory',
+                                                    column_names=['FoodCategoryName'])]
+        return food_categories
+
+    def refresh_category_in_new_item_form(self):
+        if self.comboBox_item_types.currentText() == 'Ételek':
+            self.comboBox_new_item_category.clear()
+            self.comboBox_new_item_category.addItems(self.get_food_categories())
+        elif self.comboBox_item_types.currentText() == 'Italok':
+            self.comboBox_new_item_category.clear()
+            self.comboBox_new_item_category.addItems(self.get_drink_categories())
+
+    def get_category_id_by_name(self, table_name, cat_name):
+        return [id[0] for id in
+                self.sql.execute_command(Operation.SELECT, main_table_name=table_name, column_names=[table_name + "ID"],
+                                         where_condition={table_name + 'Name': cat_name})][0]
+
+    def save_new_item(self):
+        main_table = None
+        dict_structure = {}
+        if self.check_all_details():
+            if self.comboBox_new_item_type.currentText() == 'Ételek':
+                main_table = 'FoodItem'
+            elif self.comboBox_new_item_type.currentText() == 'Italok':
+                main_table = 'DrinkItem'
+            if main_table:
+                column_names = self.sql.execute_command(Operation.SELECT_COLUMNS, main_table_name=main_table)
+            dict_structure = {
+                column_names[1]: self.lineEdit_new_item_name.text(),
+                column_names[2]: self.lineEdit_new_item_description.text(),
+                column_names[3]: self.lineEdit_new_item_unitprice.text(),
+                column_names[4]: self.get_category_id_by_name(
+                    "FoodCategory" if self.comboBox_new_item_type.currentText() == "Ételek" else "DrinkCategory",
+                    self.comboBox_new_item_category.currentText()),
+                column_names[5]: self.lineEdit_new_item_discount.text()
+            }
+            if main_table and dict_structure:
+                self.sql.execute_command(Operation.INSERT, main_table_name=main_table,
+                                         insertion_value_dict=dict_structure)
+                self.set_details_empty(
+                    [self.lineEdit_new_item_name, self.lineEdit_new_item_unitprice, self.lineEdit_new_item_description,
+                     self.lineEdit_new_item_discount])
+        else:
+            self.message_box.window_execution("Nincs kitöltve az összes mező!", MessageBoxType.ERROR)
+
+    def check_all_details(self) -> bool:
+        if any(self.is_empty([self.lineEdit_new_item_name.text(),
+                              self.lineEdit_new_item_unitprice.text(),
+                              self.comboBox_new_item_category.currentText(),
+                              self.comboBox_new_item_type.currentText(), self.lineEdit_new_item_description.text()])):
+            return False
+        else:
+            return True
+
+    def is_empty(self, texts_list: List[str]) -> Optional[List[bool]]:
+        results: List[bool] = []
+        if texts_list:
+            for text in texts_list:
+                if text:
+                    results.append(False)
+                else:
+                    results.append(True)
+            return results
+
+    def set_details_empty(self, item_list: List[QLineEdit]):
+        for item in item_list:
+            item.setText('')

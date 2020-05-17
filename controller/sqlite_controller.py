@@ -13,6 +13,7 @@ class Operation(Enum):
     DELETE = 1
     UPDATE = 2
     INSERT = 3
+    SELECT_COLUMNS = 4
 
 
 class SqliteController:
@@ -50,7 +51,7 @@ class SqliteController:
     def execute_command(self, operation: Operation, main_table_name: str, column_names: List[str] = None,
                         where_condition: Dict[str, str] = None, order_by: str = None,
                         insertion_value_dict: Dict[str, str] = None, update_value_dict: Dict[str, str] = None,
-                        set_delete_id: int = None) -> List[str]:
+                        set_id: int = None) -> List[str]:
         try:
             if operation is Operation.SELECT:
                 if column_names:
@@ -84,11 +85,18 @@ class SqliteController:
                 self.__conn.commit()
             elif operation is Operation.UPDATE:
                 for key, value in update_value_dict.items():
-                    update_query_string = f"UPDATE {main_table_name} SET {key} = '{value}' WHERE {main_table_name + 'ID'} = '{str(set_delete_id)}'"
+                    update_query_string = f"UPDATE {main_table_name} SET {key} = '{value}' WHERE {main_table_name + 'ID'} = '{str(set_id)}'"
+                    self.cursor.execute(update_query_string)
                     self.__conn.commit()
             elif operation is Operation.DELETE:
-                delete_query_string = f"DELETE FROM {main_table_name} WHERE {main_table_name + 'ID'} = '{str(set_delete_id)}'"
+                delete_query_string = f"DELETE FROM {main_table_name} WHERE {main_table_name + 'ID'} = {str(set_id)}"
+                self.cursor.execute(delete_query_string)
                 self.__conn.commit()
+            elif operation is Operation.SELECT_COLUMNS:
+                select_columns_query = f"SELECT * FROM {main_table_name}"
+                cursor = self.__conn.execute(select_columns_query)
+                names = [desc[0] for desc in cursor.description]
+                return names
         except sql.Error as e:
             self.message_box.window_execution(f'Operation hiba!\n{e}', MessageBoxType.ERROR)
 

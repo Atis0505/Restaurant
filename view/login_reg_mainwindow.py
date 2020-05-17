@@ -214,9 +214,19 @@ class Ui_login_reg_mainwindow(object):
         sys.exit()
 
     def open_client_dialog(self):
+        self.btn_server.setEnabled(False)
+        self.btn_client.setEnabled(False)
+        self.password_textbox.setReadOnly(True)
+        self.username_textbox.setReadOnly(True)
+        self.tab_reg.setEnabled(False)
         self.client_dialog.show()
 
     def open_server_dialog(self):
+        self.btn_server.setEnabled(False)
+        self.btn_client.setEnabled(False)
+        self.password_textbox.setReadOnly(True)
+        self.username_textbox.setReadOnly(True)
+        self.tab_reg.setEnabled(False)
         self.server_dialog.show()
 
     def retranslateUi(self, login_reg_mainwindow):
