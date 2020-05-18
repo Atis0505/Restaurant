@@ -21,7 +21,7 @@ class ServerWindow(QDialog, Ui_server_window):
         self.lineEdit_new_item_discount.setValidator(QRegExpValidator(QRegExp("\d+")))
         self.lineEdit_new_item_unitprice.setValidator(QRegExpValidator(QRegExp("\d+")))
         self.selected_order_id = None
-        self.selected_item: Union[FoodItem, DrinkItem] = None
+        self.selected_item: Optional[Union[FoodItem, DrinkItem]] = None
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_timer_label)
         self.timer.start(1000)
@@ -499,11 +499,11 @@ class ServerWindow(QDialog, Ui_server_window):
             if type(selected_item) is FoodItem:
                 self.sql.execute_command(Operation.UPDATE, main_table_name='FoodItem',
                                          update_value_dict=self.item_details_changed(),
-                                         set_id=str(selected_item.food_item_id))
+                                         set_id=selected_item.food_item_id)
             elif type(selected_item) is DrinkItem:
                 self.sql.execute_command(Operation.UPDATE, main_table_name='DrinkItem',
                                          update_value_dict=self.item_details_changed(),
-                                         set_id=str(selected_item.drink_item_id))
+                                         set_id=selected_item.drink_item_id)
             self.message_box.window_execution('Módosítás sikeres volt!', MessageBoxType.REGULAR_INFO)
             self.get_selected_item_details()
         else:

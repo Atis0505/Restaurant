@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>server_window</class>
+    <widget class="QDialog" name="server_window">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>804</width>
+                <height>560</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>RMSystem - server view</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="1">
+                <widget class="QTabWidget" name="server_tabwidget">
+                    <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="currentIndex">
+                        <number>3</number>
+                    </property>
+                    <widget class="QWidget" name="tab_orders">
+                        <attribute name="title">
+                            <string>Rendelések</string>
+                        </attribute>
+                        <attribute name="toolTip">
+                            <string>Aktuális megrendelések</string>
+                        </attribute>
+                        <widget class="QTableWidget" name="table_orders">
+                            <property name="geometry">
+                                <rect>
+                                    <x>20</x>
+                                    <y>10</y>
+                                    <width>751</width>
+                                    <height>501</height>
+                                </rect>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="layoutDirection">
+                                <enum>Qt::LeftToRight</enum>
+                            </property>
+                            <property name="sizeAdjustPolicy">
+                                <enum>QAbstractScrollArea::AdjustToContents</enum>
+                            </property>
+                            <column>
+                                <property name="text">
+                                    <string>Rendelés azonosító</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Kezdés</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Befejezés</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Összeg</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Állapot</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>Fizetés</string>
+                                </property>
+                            </column>
+                        </widget>
+                    </widget>
+                    <widget class="QWidget" name="tab_payment">
+                        <attribute name="title">
+                            <string>Fizetés</string>
+                        </attribute>
+                        <attribute name="toolTip">
+                            <string>Kiválasztott asztal rendelésének megtekintése</string>
+                        </attribute>
+                        <widget class="QWidget" name="gridLayoutWidget">
+                            <property name="geometry">
+                                <rect>
+                                    <x>10</x>
+                                    <y>20</y>
+                                    <width>751</width>
+                                    <height>481</height>
+                                </rect>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_2">
+                                <property name="sizeConstraint">
+                                    <enum>QLayout::SetMaximumSize</enum>
+                                </property>
+                                <item row="13" column="1">
+                                    <layout class="QVBoxLayout" name="verticalLayout_2">
+                                        <item>
+                                            <spacer name="verticalSpacer">
+                                                <property name="orientation">
+                                                    <enum>Qt::Vertical</enum>
+                                                </property>
+                                                <property name="sizeHint" stdset="0">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>40</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="btn_order_delete">
+                                                <property name="text">
+                                                    <string>Rendelés törlés</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="btn_paid">
+                                                <property name="text">
+                                                    <string>Fizetve</string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                                <item row="4" column="1">
+                                    <widget class="QLabel" name="label_order_id">
+                                        <property name="text">
+                                            <string>(rendelés azonosító)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="10" column="1">
+                                    <widget class="QLabel" name="label_order_time">
+                                        <property name="text">
+                                            <string>(rendelési idő)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="12" column="1">
+                                    <widget class="QLabel" name="label_actual_time">
+                                        <property name="text">
+                                            <string>(aktuális idő)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="5" column="1">
+                                    <widget class="QLabel" name="label_6">
+                                        <property name="text">
+                                            <string>Állapot:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="1">
+                                    <widget class="QLabel" name="label_7">
+                                        <property name="text">
+                                            <string>Összeg:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="6" column="1">
+                                    <widget class="QLabel" name="label_order_status">
+                                        <property name="text">
+                                            <string>(rendelés állapot)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="1">
+                                    <widget class="QLabel" name="label_result">
+                                        <property name="text">
+                                            <string>(összeg)</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="9" column="1">
+                                    <widget class="QLabel" name="label_5">
+                                        <property name="text">
+                                            <string>Rendelés leadás ideje:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="11" column="1">
+                                    <widget class="QLabel" name="label">
+                                        <property name="text">
+                                            <string>Jelenleg idő:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="0" column="0" rowspan="14">
+                                    <widget class="QTableWidget" name="table_order_details">
+                                        <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <column>
+                                            <property name="text">
+                                                <string>Mennyiség</string>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Név</string>
+                                            </property>
+                                        </column>
+                                        <column>
+                                            <property name="text">
+                                                <string>Ár</string>
+                                            </property>
+                                        </column>
+                                    </widget>
+                                </item>
+                                <item row="3" column="1">
+                                    <widget class="QLabel" name="label_2">
+                                        <property name="text">
+                                            <string>Rendelés azonosító:</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </widget>
+                    <widget class="QWidget" name="tab_full_supply">
+                        <attribute name="title">
+                            <string>Teljes kínálat</string>
+                        </attribute>
+                        <attribute name="toolTip">
+                            <string>Teljes étlap és itallap áttekintése</string>
+                        </attribute>
+                        <widget class="QTabWidget" name="all_items_tab">
+                            <property name="geometry">
+                                <rect>
+                                    <x>20</x>
+                                    <y>10</y>
+                                    <width>671</width>
+                                    <height>431</height>
+                                </rect>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="currentIndex">
+                                <number>9</number>
+                            </property>
+                            <widget class="QWidget" name="tab_soup">
+                                <attribute name="title">
+                                    <string>Levesek</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_soup_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_2">
+                                <attribute name="title">
+                                    <string>Saláták</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_salad_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_sultek">
+                                <attribute name="title">
+                                    <string>Sültek</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_meat_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_fish_main">
+                                <attribute name="title">
+                                    <string>Halételek</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_fishfood_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_desserts">
+                                <attribute name="title">
+                                    <string>Desszertek</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_dessert_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_coffee_tee">
+                                <attribute name="title">
+                                    <string>Kávék / Teák</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_coffee_tee_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_soft_drinks">
+                                <attribute name="title">
+                                    <string>Üditők</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_soft_drinks_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_beer">
+                                <attribute name="title">
+                                    <string>Sörök</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_beer_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_wein">
+                                <attribute name="title">
+                                    <string>Borok</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_wein_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>591</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                            <widget class="QWidget" name="tab_shoots">
+                                <attribute name="title">
+                                    <string>Tömények</string>
+                                </attribute>
+                                <widget class="QTableWidget" name="table_shoot_list">
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>10</x>
+                                            <y>10</y>
+                                            <width>641</width>
+                                            <height>381</height>
+                                        </rect>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <column>
+                                        <property name="text">
+                                            <string>Azonosító</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Név</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Leírás</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Ár</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kategória</string>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>Kedvezmény</string>
+                                        </property>
+                                    </column>
+                                </widget>
+                            </widget>
+                        </widget>
+                    </widget>
+                    <widget class="QWidget" name="tab_edit_supply">
+                        <attribute name="title">
+                            <string>Kínálat szerkesztése</string>
+                        </attribute>
+                        <attribute name="toolTip">
+                            <string>Kínalt szerkesztése (új hozzáadása, törlése, szerkesztése)</string>
+                        </attribute>
+                        <widget class="QGroupBox" name="groupBox">
+                            <property name="geometry">
+                                <rect>
+                                    <x>60</x>
+                                    <y>40</y>
+                                    <width>291</width>
+                                    <height>431</height>
+                                </rect>
+                            </property>
+                            <property name="title">
+                                <string>Termék módosítás</string>
+                            </property>
+                            <widget class="QWidget" name="formLayoutWidget">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>10</x>
+                                        <y>20</y>
+                                        <width>271</width>
+                                        <height>151</height>
+                                    </rect>
+                                </property>
+                                <layout class="QFormLayout" name="formLayout">
+                                    <item row="0" column="0">
+                                        <widget class="QLabel" name="label_3">
+                                            <property name="text">
+                                                <string>Termék típus:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="0" column="1">
+                                        <widget class="QComboBox" name="comboBox_item_types"/>
+                                    </item>
+                                    <item row="2" column="0">
+                                        <widget class="QLabel" name="label_4">
+                                            <property name="text">
+                                                <string>Termék kategória:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="2" column="1">
+                                        <widget class="QComboBox" name="comboBox_item_category"/>
+                                    </item>
+                                    <item row="4" column="0">
+                                        <widget class="QLabel" name="label_8">
+                                            <property name="text">
+                                                <string>Termékek:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="4" column="1">
+                                        <widget class="QComboBox" name="comboBox_items"/>
+                                    </item>
+                                    <item row="1" column="1">
+                                        <spacer name="verticalSpacer_2">
+                                            <property name="orientation">
+                                                <enum>Qt::Vertical</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>40</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </item>
+                                    <item row="3" column="1">
+                                        <spacer name="verticalSpacer_3">
+                                            <property name="orientation">
+                                                <enum>Qt::Vertical</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>40</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </item>
+                                </layout>
+                            </widget>
+                            <widget class="QWidget" name="formLayoutWidget_2">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>10</x>
+                                        <y>190</y>
+                                        <width>271</width>
+                                        <height>231</height>
+                                    </rect>
+                                </property>
+                                <layout class="QFormLayout" name="formLayout_2">
+                                    <item row="0" column="0">
+                                        <widget class="QLabel" name="label_9">
+                                            <property name="text">
+                                                <string>Termék név:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="0" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_item_name"/>
+                                    </item>
+                                    <item row="2" column="0">
+                                        <widget class="QLabel" name="label_10">
+                                            <property name="text">
+                                                <string>Leírás:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="4" column="0">
+                                        <widget class="QLabel" name="label_11">
+                                            <property name="text">
+                                                <string>Egységár:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="4" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_item_unitprice"/>
+                                    </item>
+                                    <item row="5" column="0">
+                                        <widget class="QLabel" name="label_12">
+                                            <property name="text">
+                                                <string>Kedvezmény:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="5" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_item_discount"/>
+                                    </item>
+                                    <item row="6" column="0">
+                                        <widget class="QLabel" name="label_13">
+                                            <property name="text">
+                                                <string>Termék kategória:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="6" column="1">
+                                        <widget class="QComboBox" name="comboBox_selected_item_category"/>
+                                    </item>
+                                    <item row="2" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_description"/>
+                                    </item>
+                                </layout>
+                            </widget>
+                        </widget>
+                        <widget class="QGroupBox" name="groupBox_2">
+                            <property name="geometry">
+                                <rect>
+                                    <x>430</x>
+                                    <y>40</y>
+                                    <width>311</width>
+                                    <height>431</height>
+                                </rect>
+                            </property>
+                            <property name="title">
+                                <string>Új termék</string>
+                            </property>
+                            <widget class="QWidget" name="formLayoutWidget_3">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>20</x>
+                                        <y>20</y>
+                                        <width>271</width>
+                                        <height>241</height>
+                                    </rect>
+                                </property>
+                                <layout class="QFormLayout" name="formLayout_3">
+                                    <item row="0" column="0">
+                                        <widget class="QLabel" name="label_14">
+                                            <property name="text">
+                                                <string>Termék név:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="0" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_new_item_name"/>
+                                    </item>
+                                    <item row="1" column="0">
+                                        <widget class="QLabel" name="label_15">
+                                            <property name="text">
+                                                <string>Leírás:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="2" column="0">
+                                        <widget class="QLabel" name="label_16">
+                                            <property name="text">
+                                                <string>Egységár:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="2" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_new_item_unitprice"/>
+                                    </item>
+                                    <item row="3" column="0">
+                                        <widget class="QLabel" name="label_17">
+                                            <property name="text">
+                                                <string>Kedvezmény:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="3" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_new_item_discount"/>
+                                    </item>
+                                    <item row="4" column="0">
+                                        <widget class="QLabel" name="label_18">
+                                            <property name="text">
+                                                <string>Termék kategória:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="4" column="1">
+                                        <widget class="QComboBox" name="comboBox_new_item_category"/>
+                                    </item>
+                                    <item row="5" column="0">
+                                        <widget class="QLabel" name="label_19">
+                                            <property name="text">
+                                                <string>Termék típus:</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item row="5" column="1">
+                                        <widget class="QComboBox" name="comboBox_new_item_type"/>
+                                    </item>
+                                    <item row="1" column="1">
+                                        <widget class="QLineEdit" name="lineEdit_new_item_description"/>
+                                    </item>
+                                </layout>
+                            </widget>
+                            <widget class="QWidget" name="verticalLayoutWidget">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>9</x>
+                                        <y>309</y>
+                                        <width>291</width>
+                                        <height>111</height>
+                                    </rect>
+                                </property>
+                                <layout class="QVBoxLayout" name="verticalLayout">
+                                    <item>
+                                        <widget class="QPushButton" name="btn_save_new_item">
+                                            <property name="text">
+                                                <string>Új termék mentése</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QPushButton" name="btn_save_modification">
+                                            <property name="text">
+                                                <string>Meglévő termék változtatásának mentése</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </widget>
+                        </widget>
+                    </widget>
+                </widget>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
