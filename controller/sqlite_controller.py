@@ -86,10 +86,12 @@ class SqliteController:
             elif operation is Operation.UPDATE:
                 for key, value in update_value_dict.items():
                     update_query_string = f"UPDATE {main_table_name} SET {key} = '{value}' WHERE {main_table_name + 'ID'} = '{str(set_id)}'"
+                    print(update_query_string)
                     self.cursor.execute(update_query_string)
                     self.__conn.commit()
             elif operation is Operation.DELETE:
                 delete_query_string = f"DELETE FROM {main_table_name} WHERE {main_table_name + 'ID'} = {str(set_id)}"
+                print(delete_query_string)
                 self.cursor.execute(delete_query_string)
                 self.__conn.commit()
             elif operation is Operation.SELECT_COLUMNS:
@@ -133,7 +135,6 @@ class SqliteController:
                 query = f"DELETE FROM {table_name} WHERE {table_name + 'ID'} = {datas[0]}"
         except sql.Error as e:
             self.message_box.window_execution(f'Operation hiba!\n{e}', MessageBoxType.ERROR)
-        # self.__close_db()
 
     def __close_db(self):
         self.__conn.commit()
