@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from PyQt5.QtCore import QTimer, QRegExp
 from PyQt5.QtGui import QRegExpValidator
@@ -47,6 +47,9 @@ class ServerWindow(QDialog, Ui_server_window):
         self.refresh_category()
         self.refresh_items()
         self.refresh_category_in_new_item_form()
+        self.get_selected_item_details()
+
+        """Method connections"""
         self.table_orders.cellClicked.connect(self.get_selected_order_details)
         self.server_tabwidget.currentChanged.connect(self.get_selected_tabwidget_on_main)
         self.all_items_tab.currentChanged.connect(self.get_selected_tabwidget_on_secondary)
@@ -55,8 +58,9 @@ class ServerWindow(QDialog, Ui_server_window):
         self.comboBox_item_types.currentTextChanged.connect(self.refresh_category)
         self.comboBox_item_category.currentTextChanged.connect(self.refresh_items)
         self.comboBox_new_item_type.currentTextChanged.connect(self.refresh_category_in_new_item_form)
-        self.comboBox_items.currentText.connect(self.get_selected_item_details)
+        self.comboBox_items.currentTextChanged.connect(self.get_selected_item_details)
         self.btn_save_new_item.clicked.connect(self.save_new_item)
+        self.btn_save_modification.clicked.connect(self.save_modification)
 
     def get_selected_tabwidget_on_main(self, index=0):
         if index == 0:
@@ -446,22 +450,88 @@ class ServerWindow(QDialog, Ui_server_window):
     def refresh_category(self):
         if self.comboBox_item_types.currentText() == 'Ételek':
             self.comboBox_item_category.clear()
-            self.comboBox_item_category.addItems(self.get_drink_categories())
+            self.comboBox_item_category.addItems(self.get_food_categories())
+            self.comboBox_selected_item_category.addItems(self.get_food_categories())
         elif self.comboBox_item_types.currentText() == 'Italok':
             self.comboBox_item_category.clear()
-            self.comboBox_item_category.addItems(self.get_food_categories())
+            self.comboBox_item_category.addItems(self.get_drink_categories())
+            self.comboBox_selected_item_category.addItems(self.get_drink_categories())
 
     def refresh_items(self):
-        category_id = None
         if self.comboBox_item_types.currentText() == 'Ételek':
             self.comboBox_items.clear()
-            self.comboBox_items.addItems(self.get_fooditems_by_category_id(self.comboBox_item_category.currentText()))
+            if self.comboBox_item_category:
+                self.comboBox_items.addItems(
+                    self.get_fooditems_by_category_id(self.comboBox_item_category.currentText()))
         elif self.comboBox_item_types.currentText() == 'Italok':
             self.comboBox_items.clear()
-            self.comboBox_items.addItems(self.get_drinkitems_by_category_id(self.comboBox_item_category.currentText()))
+            if self.comboBox_item_category:
+                self.comboBox_items.addItems(
+                    self.get_drinkitems_by_category_id(self.comboBox_item_category.currentText()))
 
-    def get_selected_item_details(self):
-        pass
+    def get_selected_item_details(self) -> Union[DrinkItem, FoodItem]:
+        if self.comboBox_item_types.currentText() == 'Ételek':
+            if self.comboBox_items:
+                datas = self.sql.execute_command(Operation.SELECT, main_table_name='FoodItem',
+                                                 where_condition={'FoodName': self.comboBox_items.currentText()})[0]
+                food_item = FoodItem(*datas)
+                self.lineEdit_item_name.setText(food_item.food_item_name)
+                self.lineEdit_description.setText(food_item.food_description)
+                self.lineEdit_item_unitprice.setText(str(food_item.food_price))
+                self.lineEdit_item_discount.setText(str(food_item.food_discount))
+                return food_item
+        if self.comboBox_item_types.currentText() == 'Italok':
+            if self.comboBox_items:
+                datas = self.sql.execute_command(Operation.SELECT, main_table_name='DrinkItem',
+                                                 where_condition={'DrinkItemName': self.comboBox_items.currentText()})[
+                    0]
+                drink_item = DrinkItem(*datas)
+                self.lineEdit_item_name.setText(drink_item.drink_item_name)
+                self.lineEdit_description.setText(drink_item.drink_description)
+                self.lineEdit_item_unitprice.setText(str(drink_item.drink_price))
+                self.lineEdit_item_discount.setText(str(drink_item.drink_discount))
+                return drink_item
+
+    def save_modification(self):
+        if self.item_details_changed:
+            if type(self.get_selected_item_details()) is FoodItem:
+                main_table = 'FoodItem'
+            elif type(self.get_selected_item_details()) is DrinkItem:
+                main_table = 'DrinkItem'
+            # self.sql.execute_command(Operation.UPDATE, main_table_name=main_table, update_value_dict=self.item_details_changed(), set_id=)
+            pass
+        else:
+            self.message_box.window_execution('Nem történt változtatás!', MessageBoxType.REGULAR_INFO)
+
+    def item_details_changed(self) -> Union[bool, dict]:
+        item: Union[DrinkItem, FoodItem] = self.get_selected_item_details()
+        changes_dict = {}
+        if type(item) is DrinkItem:
+            if item.drink_item_name != self.lineEdit_item_name.text():
+                changes_dict['DrinkItemName'] = self.lineEdit_item_name.text()
+            elif item.drink_description != self.lineEdit_description.text():
+                changes_dict['Description'] = self.lineEdit_description.text()
+            elif item.drink_price != self.lineEdit_item_unitprice.text():
+                changes_dict['UnitPrice'] = self.lineEdit_item_unitprice.text()
+            elif item.drink_discount != self.lineEdit_item_discount.text():
+                changes_dict['Discount'] = self.lineEdit_item_discount.text()
+            elif self.comboBox_item_category.currentText() != self.comboBox_selected_item_category.currentText():
+                changes_dict['DrinkCategory'] = self.comboBox_selected_item_category.currentText()
+            return changes_dict
+        elif type(item) is FoodItem:
+            if item.food_item_name != self.lineEdit_item_name.text():
+                changes_dict['FoodName'] = self.lineEdit_item_name.text()
+            elif item.food_description != self.lineEdit_description.text():
+                changes_dict['Description'] = self.lineEdit_description.text()
+            elif item.food_price != self.lineEdit_item_unitprice.text():
+                changes_dict['UnitPrice'] = self.lineEdit_item_unitprice.text()
+            elif item.food_discount != self.lineEdit_item_discount.text():
+                changes_dict['Discount'] = self.lineEdit_item_discount.text()
+            elif self.comboBox_item_category.currentText() != self.comboBox_selected_item_category.currentText():
+                changes_dict['FoodCategory'] = self.comboBox_selected_item_category.currentText()
+            return changes_dict
+        else:
+            return False
 
     def get_fooditems_by_category_id(self, category_name) -> List[str]:
         food_list = None
@@ -486,8 +556,8 @@ class ServerWindow(QDialog, Ui_server_window):
 
     def get_drink_categories(self) -> List[str]:
         drinks_categories = [name[0] for name in
-                             self.sql.execute_command(Operation.SELECT, main_table_name='FoodCategory',
-                                                      column_names=['FoodCategoryName'])]
+                             self.sql.execute_command(Operation.SELECT, main_table_name='DrinkCategory',
+                                                      column_names=['DrinkCategoryName'])]
         return drinks_categories
 
     def get_food_categories(self):
